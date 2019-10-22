@@ -1,10 +1,16 @@
-<div class="box-list" cdkDropList (cdkDropListDropped)="drop($event)">
+<div class="btn-group btn-group-toggle" *ngIf="router.url == '/audio'">
+  <label class="btn-primary" ngbButtonLabel>
+    <button type="button" class="btn btn-primary" (click)="router.navigate(['/audio/new']);"> Add new audio</button>
+  </label>
+</div>
+
+<div class="box-list" cdkDropList (cdkDropListDropped)="drop($event)" *ngIf="router.url == '/audio'">
   <div class="drag-box" *ngFor="let customer of customers" cdkDrag>
     {{customer.name}}
   </div>
 </div>
 
-<table>
+<table *ngIf="router.url == '/audio'">
   <th>Name</th>
   <th>Order</th>
   <th>URL</th>
@@ -15,7 +21,8 @@
   </tr>
 </table>
 
-<div>
+<!-- Audio uploader -->
+<div *ngIf="router.url == '/audio/new'">
   <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit(uploadForm)">
     <div>
       <input type="file" name="profile" (change)="onFileSelect($event)" />

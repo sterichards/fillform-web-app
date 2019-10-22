@@ -6,17 +6,12 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 })
 export class FileService {
 
+  SERVER_URL = 'https://s3-eu-west-1.amazonaws.com/happy-hints-file-repository-dev/';
+
   constructor(private httpClient: HttpClient) {
   }
 
-  signFile(form) {
-    const headerDict = {
-      'Authorization': 'Bearer YTc0MDRiZmQ4ODg1M2UwOTAwZTgyZDEzNWNiZmM2M2MwODFiMDhkMmZjYWE0MTFiMTYzMjJhNzRlNTEyNGYxMQ'
-    }
-
-    const requestOptions = {
-      headers: new HttpHeaders(headerDict),
-    };
+  signFile(form, uploadForm) {
 
     const body = {
       fileName: form.value.profile.name,
@@ -24,8 +19,23 @@ export class FileService {
       mimeType: form.value.profile.type,
     }
 
-    return this.httpClient.post('http://localhost/app_dev.php/files/sign', body, requestOptions);
+    this.httpClient.post('http://localhost/app_dev.php/files/sign', body).subscribe(response => {
+
+      const formData = new FormData();
+
+      response.s3PostPolicy.conditions.forEach(function (signItem) {
+        let objKey = Object.keys(signItem);
+        formData.append(objKey, signItem[objKey]);
+      });
+
+      formData.append('policy', response.s3PostPolicyEncodedString);
+      formData.append('X-Amz-Signature', response.s3PostPolicySignature);
+      formData.append('file', uploadForm.get('profile').value);
+
+      this.httpClient.post<any>(this.SERVER_URL, formData).subscribe(
+        (res) => console.log(res),
+        (err) => console.log(err)
+      );
+    });
   }
-
-
 }

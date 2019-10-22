@@ -1,10 +1,10 @@
-<div class="btn-group btn-group-toggle">
+<div class="btn-group btn-group-toggle" *ngIf="router.url == '/video'">
   <label class="btn-primary" ngbButtonLabel>
     <button type="button" class="btn btn-primary" (click)="router.navigate(['/video/new']);"> Add new video</button>
   </label>
 </div>
 
-<table>
+<table *ngIf="router.url == '/video'">
   <th>Name</th>
   <th>Order</th>
   <th>Length</th>
@@ -16,3 +16,15 @@
     <td>{{video.video_url}}</td>
   </tr>
 </table>
+
+<!-- Video uploader -->
+<div *ngIf="router.url == '/video/new'">
+  <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit(uploadForm)">
+    <div>
+      <input type="file" name="profile" (change)="onFileSelect($event)" />
+    </div>
+    <div>
+      <button type="submit">Upload</button>
+    </div>
+  </form>
+</div>

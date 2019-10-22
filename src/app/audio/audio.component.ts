@@ -52,24 +52,8 @@ export class AudioComponent implements OnInit {
   onSubmit(form: NgForm) {
     const formData = new FormData();
 
-    this.upload.signFile(form).subscribe(response => {
-
-      response.s3PostPolicy.conditions.forEach(function(signItem) {
-        let objKey = Object.keys(signItem);
-        formData.append(objKey, signItem[objKey]);
-      });
-
-      formData.append('policy', response.s3PostPolicyEncodedString);
-      formData.append('X-Amz-Signature', response.s3PostPolicySignature);
-      formData.append('file', this.uploadForm.get('profile').value);
-
-      this.httpClient.post<any>(this.SERVER_URL, formData).subscribe(
-        (res) => console.log(res),
-        (err) => console.log(err)
-      );
-
+    this.upload.signFile(form, this.uploadForm).subscribe(response => {
       this.audio.createAudio(response.id, 'test', 1);
-
     }, err => {
       throw err;
     });
@@ -77,15 +61,11 @@ export class AudioComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getAudio();
+    this.audio.getAll().subscribe(res => this.audios = res);
 
     this.uploadForm = this.formBuilder.group({
       profile: ['']
     });
-  }
-
-  getAudio() {
-    this.audio.getAll().subscribe(res => this.audios = res);
   }
 
   customers = [

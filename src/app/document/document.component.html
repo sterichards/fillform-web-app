@@ -1,10 +1,10 @@
-<div class="btn-group btn-group-toggle">
+<div class="btn-group btn-group-toggle" *ngIf="router.url == '/document'">
   <label class="btn-primary" ngbButtonLabel>
     <button type="button" class="btn btn-primary" (click)="router.navigate(['/document/new']);"> Add new document</button>
   </label>
 </div>
 
-<table>
+<table *ngIf="router.url == '/document'">
   <th>Name</th>
   <th>Order</th>
   <th>URL</th>
@@ -14,3 +14,15 @@
     <td>{{document.file_url}}</td>
   </tr>
 </table>
+
+<!-- Document uploader -->
+<div *ngIf="router.url == '/document/new'">
+  <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit(uploadForm)">
+    <div>
+      <input type="file" name="profile" (change)="onFileSelect($event)" />
+    </div>
+    <div>
+      <button type="submit">Upload</button>
+    </div>
+  </form>
+</div>
