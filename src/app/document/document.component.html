@@ -1,0 +1,16 @@
+<div class="btn-group btn-group-toggle">
+  <label class="btn-primary" ngbButtonLabel>
+    <button type="button" class="btn btn-primary" (click)="router.navigate(['/document/new']);"> Add new document</button>
+  </label>
+</div>
+
+<table>
+  <th>Name</th>
+  <th>Order</th>
+  <th>URL</th>
+  <tr *ngFor="let document of documents;">
+    <td>{{document.name}}</td>
+    <td>{{document.order}}</td>
+    <td>{{document.file_url}}</td>
+  </tr>
+</table>

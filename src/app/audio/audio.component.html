@@ -1,0 +1,27 @@
+<div class="box-list" cdkDropList (cdkDropListDropped)="drop($event)">
+  <div class="drag-box" *ngFor="let customer of customers" cdkDrag>
+    {{customer.name}}
+  </div>
+</div>
+
+<table>
+  <th>Name</th>
+  <th>Order</th>
+  <th>URL</th>
+  <tr *ngFor="let audio of audios;">
+    <td>{{audio.name}}</td>
+    <td>{{audio.order}}</td>
+    <td>{{audio.file_url}}</td>
+  </tr>
+</table>
+
+<div>
+  <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit(uploadForm)">
+    <div>
+      <input type="file" name="profile" (change)="onFileSelect($event)" />
+    </div>
+    <div>
+      <button type="submit">Upload</button>
+    </div>
+  </form>
+</div>

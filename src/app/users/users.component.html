@@ -1,0 +1,69 @@
+<!-- List Users /users -->
+<div *ngIf="router.url == '/users'">
+  <div class="btn-group btn-group-toggle">
+    <label class="btn-primary" ngbButtonLabel>
+      <button type="button" class="btn btn-primary" (click)="router.navigate(['/users/new']);"> Add new user</button>
+    </label>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Username</th>
+      <th>Forename</th>
+      <th>Surname</th>
+      <th>Created At</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users;">
+      <th scope="row">{{user.email}}</th>
+      <td>{{user.forename}}</td>
+      <td>{{user.surname}}</td>
+      <td>{{user.createdAt | date:'MMM d, y'}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<form [formGroup]="newUserForm" (ngSubmit)="onSubmit()" *ngIf="router.url == '/users/new'">
+  <div class="example-container" *ngIf="router.url == '/users/new'">
+    <mat-form-field>
+      <input matInput placeholder="Enter your email" formControlName="email" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Forename" formControlName="forename" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Surname" formControlName="surname" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Company" formControlName="company" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Enter your password" formControlName="password" [type]="hide ? 'password' : 'text'">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Verify your password" formControlName="passwordVerify" [type]="hide ? 'password' : 'text'">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <p>
+      <button type="submit" md-raised-button>Submit</button>
+      <button type="button" (click)="goBack()" md-raised-button>Back</button>
+    </p>
+  </div>
+</form>
