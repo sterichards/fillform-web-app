@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { environment } from '@environments/environment';
+import {sign} from "@app/_models/sign";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
-
-  SERVER_URL = 'https://s3-eu-west-1.amazonaws.com/happy-hints-file-repository-dev/';
 
   constructor(private httpClient: HttpClient) {
   }
@@ -19,23 +19,20 @@ export class FileService {
       mimeType: form.value.profile.type,
     }
 
-    this.httpClient.post('http://localhost/app_dev.php/files/sign', body).subscribe(response => {
+    this.httpClient.post(`${environment.apiUrl}/files/sign`, body).subscribe((response: sign) => {
 
       const formData = new FormData();
 
-      response.s3PostPolicy.conditions.forEach(function (signItem) {
-        let objKey = Object.keys(signItem);
-        formData.append(objKey, signItem[objKey]);
+      response.s3PostPolicy.conditions.forEach(signItem => {
+        const objKey = Object.keys(signItem);
+        formData.append(objKey[0], signItem[objKey[0]]);
       });
 
       formData.append('policy', response.s3PostPolicyEncodedString);
       formData.append('X-Amz-Signature', response.s3PostPolicySignature);
       formData.append('file', uploadForm.get('profile').value);
 
-      this.httpClient.post<any>(this.SERVER_URL, formData).subscribe(
-        (res) => console.log(res),
-        (err) => console.log(err)
-      );
+      return this.httpClient.post<any>(response.s3UploadUrl, formData);
     });
   }
 }

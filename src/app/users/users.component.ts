@@ -61,7 +61,7 @@ export class UsersComponent implements OnInit {
   }
 
   getUsers() {
-    this.usersService.getUsers().subscribe(res => this.users = res);
+    this.usersService.getAll().subscribe(res => this.users = res);
   }
 
   goBack() {

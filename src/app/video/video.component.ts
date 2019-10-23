@@ -26,6 +26,6 @@ export class VideoComponent implements OnInit {
     });
   }
   ngOnInit() {
-    this.video.getVideos().subscribe(res => this.videos = res);
+    this.video.getAll().subscribe(res => this.videos = res);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { environment } from '@environments/environment';
 
 @Injectable({
@@ -9,7 +9,8 @@ export class VideoService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getVideos() {
-    return this.httpClient.get(`${environment.apiUrl}/videos`);
+  getAll() {
+    const params = new HttpParams().set('cms', 'true');
+    return this.httpClient.get(`${environment.apiUrl}/videos`, { params });
   }
 }

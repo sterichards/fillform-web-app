@@ -8,7 +8,6 @@ import { UserService, AuthenticationService } from '@app/_services';
 export class HomeComponent {
     loading = false;
     currentUser: User;
-    userFromApi: User;
 
     constructor(
         private userService: UserService,

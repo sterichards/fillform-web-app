@@ -25,7 +25,7 @@ export class DocumentComponent implements OnInit {
     });
   }
   ngOnInit() {
-    this.document.getDocuments().subscribe(res => this.documents = res);
+    this.document.getAll().subscribe(res => this.documents = res);
   }
 
 }

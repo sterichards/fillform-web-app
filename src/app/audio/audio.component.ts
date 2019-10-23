@@ -5,6 +5,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {Router} from '@angular/router';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {FileService} from '@app/_services/file.service';
+import {environment} from "@environments/environment";
+import {sign} from "@app/_models/sign";
 
 @Component({
   selector: 'app-audio',
@@ -17,6 +19,7 @@ export class AudioComponent implements OnInit {
   audios;
   SERVER_URL = 'https://s3-eu-west-1.amazonaws.com/happy-hints-file-repository-dev/';
   uploadForm: FormGroup;
+  private signId;
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]
@@ -50,15 +53,38 @@ export class AudioComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    const formData = new FormData();
+    const body = {
+      fileName: form.value.profile.name,
+      fileSize: form.value.profile.size,
+      mimeType: form.value.profile.type,
+    }
 
-    this.upload.signFile(form, this.uploadForm).subscribe(response => {
-      this.audio.createAudio(response.id, 'test', 1);
-    }, err => {
-      throw err;
+    this.httpClient.post(`${environment.apiUrl}/files/sign`, body).subscribe((response: sign) => {
+
+      // Set the sign Id
+      this.signId = response.id;
+
+      let formData = new FormData();
+
+      response.s3PostPolicy.conditions.forEach(signItem => {
+        const objKey = Object.keys(signItem);
+        formData.append(objKey[0], signItem[objKey[0]]);
+      });
+
+      formData.append('policy', response.s3PostPolicyEncodedString);
+      formData.append('X-Amz-Signature', response.s3PostPolicySignature);
+      formData.append('file', this.uploadForm.get('profile').value);
+
+      this.httpClient.post(response.s3UploadUrl, formData).subscribe(s3UploadResponse => {
+
+        this.audio.createAudio(this.signId, form.value.profile.name, 1).subscribe(repsonse => {
+          this.router.navigate(['/audio']);
+        });
+
+      });
+
     });
   }
-
 
   ngOnInit() {
     this.audio.getAll().subscribe(res => this.audios = res);
