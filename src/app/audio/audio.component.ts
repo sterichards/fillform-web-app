@@ -17,7 +17,6 @@ export class AudioComponent implements OnInit {
 
   angForm: FormGroup;
   audios;
-  SERVER_URL = 'https://s3-eu-west-1.amazonaws.com/happy-hints-file-repository-dev/';
   uploadForm: FormGroup;
   private signId;
 
@@ -31,8 +30,7 @@ export class AudioComponent implements OnInit {
     private audio: AudioService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient,
-    private upload: FileService
+    private httpClient: HttpClient
   ) {
     this.createForm();
   }
@@ -82,7 +80,6 @@ export class AudioComponent implements OnInit {
         });
 
       });
-
     });
   }
 

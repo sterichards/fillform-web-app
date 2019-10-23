@@ -13,4 +13,14 @@ export class DocumentService {
     const params = new HttpParams().set('cms', 'true');
     return this.httpClient.get(`${environment.apiUrl}/documents`, { params });
   }
+
+  createDocument(fileId, fileName, orderValue) {
+
+    const body = {
+      file: fileId,
+      name: fileName,
+      order: orderValue
+    }
+    return this.httpClient.post(`${environment.apiUrl}/document`, body);
+  }
 }
