@@ -4,9 +4,8 @@ import {AudioService} from '../_services/audio.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {Router} from '@angular/router';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {FileService} from '@app/_services/file.service';
-import {environment} from "@environments/environment";
-import {sign} from "@app/_models/sign";
+import {environment} from '@environments/environment';
+import {sign} from '@app/_models/sign';
 
 @Component({
   selector: 'app-audio',
@@ -33,6 +32,14 @@ export class AudioComponent implements OnInit {
     private httpClient: HttpClient
   ) {
     this.createForm();
+  }
+
+  ngOnInit() {
+    this.audio.getAll().subscribe(res => this.audios = res);
+
+    this.uploadForm = this.formBuilder.group({
+      profile: ['']
+    });
   }
 
   createForm() {
@@ -74,20 +81,10 @@ export class AudioComponent implements OnInit {
       formData.append('file', this.uploadForm.get('profile').value);
 
       this.httpClient.post(response.s3UploadUrl, formData).subscribe(s3UploadResponse => {
-
         this.audio.createAudio(this.signId, form.value.profile.name, 1).subscribe(repsonse => {
           this.router.navigate(['/audio']);
         });
-
       });
-    });
-  }
-
-  ngOnInit() {
-    this.audio.getAll().subscribe(res => this.audios = res);
-
-    this.uploadForm = this.formBuilder.group({
-      profile: ['']
     });
   }
 

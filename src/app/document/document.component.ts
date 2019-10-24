@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
 import {DocumentService} from '../_services/document.service';
 import {Router} from '@angular/router';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {sign} from '@app/_models/sign';
-import {HttpClient} from '@angular/common/http';
+
 
 @Component({
   selector: 'app-document',
@@ -22,8 +23,6 @@ export class DocumentComponent implements OnInit {
     file: [null, Validators.required]
   });
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-
   constructor(
     private document: DocumentService,
     private router: Router,
@@ -33,6 +32,14 @@ export class DocumentComponent implements OnInit {
     this.createForm();
   }
 
+  ngOnInit() {
+    this.document.getAll().subscribe(res => this.documents = res);
+
+    this.uploadForm = this.formBuilder.group({
+      profile: ['']
+    });
+  }
+
   createForm() {
     this.angForm = this.formBuilder.group({
       ProductName: ['', Validators.required],
@@ -40,8 +47,12 @@ export class DocumentComponent implements OnInit {
       ProductPrice: ['', Validators.required]
     });
   }
-  ngOnInit() {
-    this.document.getAll().subscribe(res => this.documents = res);
+
+  onFileSelect(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.uploadForm.get('profile').setValue(file);
+    }
   }
 
   onSubmit(form: NgForm) {
@@ -68,11 +79,9 @@ export class DocumentComponent implements OnInit {
       formData.append('file', this.uploadForm.get('profile').value);
 
       this.httpClient.post(response.s3UploadUrl, formData).subscribe(s3UploadResponse => {
-
         this.document.createDocument(this.signId, form.value.profile.name, 1).subscribe(repsonse => {
-          this.router.navigate(['/audio']);
+          this.router.navigate(['/document']);
         });
-
       });
     });
   }

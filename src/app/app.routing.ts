@@ -41,7 +41,7 @@ const routes: Routes = [
   },
   {
     path: 'document/new',
-    component: VideoComponent
+    component: DocumentComponent
   },
   {
     path: 'video',

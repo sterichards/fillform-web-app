@@ -17,11 +17,11 @@
   </tr>
 </table>
 
-<!-- Video uploader -->
+<!-- Document uploader -->
 <div *ngIf="router.url == '/video/new'">
   <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit(uploadForm)">
     <div>
-      <input type="file" name="profile" (change)="onFileSelect($event)" />
+      <input type="file" name="profile" accept=".mp4"(change)="onFileSelect($event)" />
     </div>
     <div>
       <button type="submit">Upload</button>

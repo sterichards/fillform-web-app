@@ -21,6 +21,6 @@ export class DocumentService {
       name: fileName,
       order: orderValue
     }
-    return this.httpClient.post(`${environment.apiUrl}/document`, body);
+    return this.httpClient.post(`${environment.apiUrl}/documents`, body);
   }
 }

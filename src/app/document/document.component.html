@@ -7,11 +7,15 @@
 <table *ngIf="router.url == '/document'">
   <th>Name</th>
   <th>Order</th>
+  <th>File Name</th>
   <th>URL</th>
+  <th>Created At</th>
   <tr *ngFor="let document of documents;">
     <td>{{document.name}}</td>
     <td>{{document.order}}</td>
-    <td>{{document.file_url}}</td>
+    <td>{{document.file.fileName}}</td>
+    <td>{{document.file.s3Url}}</td>
+    <td>{{document.createdAt | date:'d/M/yy'}}</td>
   </tr>
 </table>
 
@@ -19,7 +23,7 @@
 <div *ngIf="router.url == '/document/new'">
   <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit(uploadForm)">
     <div>
-      <input type="file" name="profile" (change)="onFileSelect($event)" />
+      <input type="file" name="profile" accept=".pdf"(change)="onFileSelect($event)" />
     </div>
     <div>
       <button type="submit">Upload</button>

@@ -13,4 +13,14 @@ export class VideoService {
     const params = new HttpParams().set('cms', 'true');
     return this.httpClient.get(`${environment.apiUrl}/videos`, { params });
   }
+
+  createVideo(fileId, fileName, orderValue) {
+
+    const body = {
+      file: fileId,
+      name: fileName,
+      order: orderValue
+    }
+    return this.httpClient.post(`${environment.apiUrl}/videos`, body);
+  }
 }
