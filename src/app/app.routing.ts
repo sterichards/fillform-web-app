@@ -29,27 +29,48 @@ const routes: Routes = [
 
   {
     path: 'audio',
-    component: AudioComponent
+    component: AudioComponent,
+    data: { type: 'list' }
   },
   {
     path: 'audio/new',
-    component: AudioComponent
+    component: AudioComponent,
+    data: { type: 'new' }
+  },
+  {
+    path: 'audio/edit/:id',
+    component: AudioComponent,
+    data: { type: 'edit' }
   },
   {
     path: 'document',
-    component: DocumentComponent
+    component: DocumentComponent,
+    data: { type: 'list' }
   },
   {
     path: 'document/new',
-    component: DocumentComponent
+    component: DocumentComponent,
+    data: { type: 'new' }
+  },
+  {
+    path: 'document/edit/:id',
+    component: DocumentComponent,
+    data: { type: 'edit' }
   },
   {
     path: 'video',
-    component: VideoComponent
+    component: VideoComponent,
+    data: { type: 'list' }
   },
   {
     path: 'video/new',
-    component: VideoComponent
+    component: VideoComponent,
+    data: { type: 'new' }
+  },
+  {
+    path: 'video/edit/:id',
+    component: VideoComponent,
+    data: { type: 'edit' }
   },
   {
     path: 'users',

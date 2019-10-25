@@ -1,11 +1,12 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormGroup, FormBuilder, Validators, NgForm, FormControl} from '@angular/forms';
 import {AudioService} from '../_services/audio.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {sign} from '@app/_models/sign';
+import { MatInputModule, MatButtonModule, MatSelectModule, MatIconModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-audio',
@@ -17,25 +18,39 @@ export class AudioComponent implements OnInit {
   angForm: FormGroup;
   audios;
   uploadForm: FormGroup;
+  routeType;
   private signId;
+
+  title = "app";
+  selectedValue: string = "";
+  items = [
+    { value: "0", view: "zero" },
+    { value: "1", view: "one" },
+    { value: "2", view: "Two" }
+  ];
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]
   });
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-
   constructor(
     private audio: AudioService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private route: ActivatedRoute
   ) {
     this.createForm();
   }
 
   ngOnInit() {
-    this.audio.getAll().subscribe(res => this.audios = res);
+    this.audio.getAll().subscribe(res => {this.audios = res;});
+
+    this.uploadForm = this.formBuilder.group({
+      profile: ['']
+    });
+
+    this.route.data.subscribe(data => this.routeType = data.type);
 
     this.uploadForm = this.formBuilder.group({
       profile: ['']
@@ -87,17 +102,4 @@ export class AudioComponent implements OnInit {
       });
     });
   }
-
-  customers = [
-    { name: 'Adam', age: 23 },
-    { name: 'Jack', age: 27 },
-    { name: 'Katherin', age: 26 },
-    { name: 'John', age: 30 },
-    { name: 'Watson', age: 42 },
-  ];
-
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.customers, event.previousIndex, event.currentIndex);
-  }
-
 }

@@ -1,10 +1,11 @@
 ﻿import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import {AppComponent} from './app.component';
 import {appRoutingModule} from './app.routing';
+
 
 import {
   MatButtonModule,
@@ -25,6 +26,10 @@ import {AudioComponent} from '@app/audio/audio.component';
 import {VideoComponent} from '@app/video/video.component';
 import {DocumentComponent} from '@app/document/document.component';
 import {UsersComponent} from '@app/users/users.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -38,7 +43,17 @@ import {UsersComponent} from '@app/users/users.component';
     MatSelectModule,
     MatInputModule,
     DragDropModule,
-    MatIconModule
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatMomentDateModule,
+    BrowserAnimationsModule,
+    MatTableModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatIconModule,
+    FormsModule
   ],
   declarations: [
     AppComponent,

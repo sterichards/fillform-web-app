@@ -1,3 +1,5 @@
+<h1>Document</h1>
+
 <div class="btn-group btn-group-toggle" *ngIf="router.url == '/document'">
   <label class="btn-primary" ngbButtonLabel>
     <button type="button" class="btn btn-primary" (click)="router.navigate(['/document/new']);"> Add new document</button>
@@ -9,13 +11,17 @@
   <th>Order</th>
   <th>File Name</th>
   <th>URL</th>
+  <th>Enabled</th>
   <th>Created At</th>
+  <th></th>
   <tr *ngFor="let document of documents;">
     <td>{{document.name}}</td>
     <td>{{document.order}}</td>
     <td>{{document.file.fileName}}</td>
     <td>{{document.file.s3Url}}</td>
+    <td>{{document.enabled}}</td>
     <td>{{document.createdAt | date:'d/M/yy'}}</td>
+    <td><i class="material-icons">edit</i></td>
   </tr>
 </table>
 

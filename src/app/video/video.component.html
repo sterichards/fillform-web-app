@@ -1,3 +1,5 @@
+<h1>Video</h1>
+
 <div class="btn-group btn-group-toggle" *ngIf="router.url == '/video'">
   <label class="btn-primary" ngbButtonLabel>
     <button type="button" class="btn btn-primary" (click)="router.navigate(['/video/new']);"> Add new video</button>
@@ -9,11 +11,17 @@
   <th>Order</th>
   <th>Length</th>
   <th>URL</th>
+  <th>Enabled</th>
+  <th>Created At</th>
+  <th></th>
   <tr *ngFor="let video of videos;">
     <td>{{video.name}}</td>
     <td>{{video.order}}</td>
     <td>{{video.length}}</td>
     <td>{{video.video_url}}</td>
+    <td>{{video.enabled}}</td>
+    <td>{{video.createdAt | date:'d/M/yy'}}</td>
+    <td><i class="material-icons">edit</i></td>
   </tr>
 </table>
 

@@ -1,35 +1,60 @@
-<div class="btn-group btn-group-toggle" *ngIf="router.url == '/audio'">
+<h1>Audio</h1>
+
+<div class="btn-group btn-group-toggle" *ngIf="routeType == 'list'">
   <label class="btn-primary" ngbButtonLabel>
     <button type="button" class="btn btn-primary" (click)="router.navigate(['/audio/new']);"> Add new audio</button>
+  </label>&nbsp;
+  <label class="btn-primary" ngbButtonLabel>
+    <button type="button" class="btn btn-primary" (click)="router.navigate(['/audio/new']);"> Edit Order</button>
   </label>
 </div>
 
-<div class="box-list" cdkDropList (cdkDropListDropped)="drop($event)" *ngIf="router.url == '/audio'">
-  <div class="drag-box" *ngFor="let customer of customers" cdkDrag>
-    {{customer.name}}
-  </div>
-</div>
-
-<table *ngIf="router.url == '/audio'">
-  <th>Name</th>
+<table *ngIf="routeType == 'list'">
+  <th mat-sort-header="name">Name</th>
   <th>Order</th>
   <th>File Name</th>
   <th>URL</th>
-  <th>Created At</th>
+  <th>Enabled</th>
+  <th mat-sort-header="createdAt">Created At</th>
+  <th></th>
   <tr *ngFor="let audio of audios;">
     <td>{{audio.name}}</td>
     <td>{{audio.order}}</td>
     <td>{{audio.file.fileName}}</td>
     <td>{{audio.file.s3Url}}</td>
+    <td>{{audio.enabled}}</td>
     <td>{{audio.createdAt | date:'d/M/yy'}}</td>
+    <td><i class="material-icons" style="cursor: pointer;" (click)="this.router.navigate(['/audio/edit/'+audio.id]);">edit</i></td>
   </tr>
 </table>
 
+<div *ngIf="routeType == 'edit'">
+</div>
+
 <!-- Audio uploader -->
-<div *ngIf="router.url == '/audio/new'">
-  <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit(uploadForm)">
+<div *ngIf="routeType == 'edit' || routeType == 'new'">
+
+  <mat-form-field>
+    <mat-select placeholder="I'm a select" [(ngModel)]="selectedValue">
+      <mat-option *ngFor="let item of items" [value]="item.value">
+        {{item.view}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit(uploadForm)">
     <div>
-      <input type="file" name="profile" accept=".mp3"(change)="onFileSelect($event)" />
+      <label>Name</label>
+      <input type="text">
+    </div>
+
+    <div>
+      <label>Go Live Date</label>
+      <input type="text">
+    </div>
+
+    <div>
+      <input type="file" name="profile" accept=".mp3" (change)="onFileSelect($event)"/>
     </div>
     <div>
       <button type="submit">Upload</button>
