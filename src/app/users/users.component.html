@@ -1,3 +1,12 @@
+<h1 class="mat-display-1">Users</h1>
+
+<div *ngIf="routeType == 'list'">
+  <label>
+    <button  mat-flat-button color="primary" (click)="router.navigate(['/users/new']);">Add new user</button>
+  </label>&nbsp;
+</div>
+
+<!-- List Users -->
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="routeType == 'list'">
 
   <ng-container matColumnDef="username">
@@ -29,8 +38,10 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 
-<form [formGroup]="newUserForm" (ngSubmit)="onSubmit()" *ngIf="router.url == '/users/new'">
-  <div class="example-container" *ngIf="router.url == '/users/new'">
+<!-- New User -->
+<form [formGroup]="newUserForm" (ngSubmit)="onSubmit()" *ngIf="routeType == 'new'">
+  <h2>New User</h2>
+  <div class="example-container" *ngIf="routeType == 'new'">
     <mat-form-field>
       <input matInput placeholder="Enter your email" formControlName="email" required>
     </mat-form-field>
@@ -64,8 +75,8 @@
     </mat-form-field>
 
     <p>
-      <button type="submit" md-raised-button>Submit</button>
-      <button type="button" (click)="goBack()" md-raised-button>Back</button>
+      <button mat-flat-button color="primary" type="submit">Submit</button>&nbsp;
+      <button mat-flat-button color="primary" type="button" (click)="goBack()">Back</button>
     </p>
   </div>
 </form>

@@ -1,16 +1,15 @@
 ﻿<!-- nav -->
 <mat-toolbar color="primary" *ngIf="currentUser">
-  <span>Happy Hints CMS</span>
-  <a mat-list-item [routerLink]="'/'">Home</a>
-  <a mat-list-item [routerLink]="'/admin'" *ngIf="isAdmin">Admin</a>
-
-  <a mat-list-item [routerLink]="'/audio'">Audio</a>
-  <a mat-list-item [routerLink]="'/document'">Document</a>
-  <a mat-list-item [routerLink]="'/video'">Video</a>
-
-  <a mat-list-item [routerLink]="'/users'">Users</a>
-
-  <a mat-list-item (click)="logout()">Logout</a>
+  <h3>Happy Hints CMS</h3>
+  <ul>
+    <li><a [routerLink]="'/'">Home</a></li>
+    <li><a [routerLink]="'/admin'" *ngIf="isAdmin">Admin</a></li>
+    <li><a [routerLink]="'/audio'">Audio</a></li>
+    <li><a [routerLink]="'/document'">Document</a></li>
+    <li><a [routerLink]="'/video'">Video</a></li>
+    <li><a [routerLink]="'/users'">Users</a></li>
+    <li><a (click)="logout()">Logout</a></li>
+  </ul>
 </mat-toolbar>
 
 <!-- main app container -->

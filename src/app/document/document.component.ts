@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
 import {DocumentService} from '../_services/document.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -6,6 +6,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {sign} from '@app/_models/sign';
 import {MatTableDataSource} from "@angular/material/table";
+import {MatSort} from "@angular/material/sort";
 
 
 @Component({
@@ -19,9 +20,10 @@ export class DocumentComponent implements OnInit {
   uploadForm: FormGroup;
   routeType;
   dataSource;
+  @ViewChild(MatSort, null) sort: MatSort;
   private signId;
 
-  displayedColumns = ['name', 'file.name', 'enabled', 'createdAt', 'location'];
+  displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'location'];
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]
@@ -38,8 +40,9 @@ export class DocumentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.document.getAll().subscribe((branches) => {
-      this.dataSource = new MatTableDataSource(branches);
+    this.document.getAll().subscribe((documents) => {
+      this.dataSource = new MatTableDataSource(documents);
+      this.dataSource.sort = this.sort;
     });
 
     this.route.data.subscribe(data => this.routeType = data.type);

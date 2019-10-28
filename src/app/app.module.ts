@@ -32,6 +32,8 @@ import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatToolbar, MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatSortModule} from "@angular/material/sort";
 
 @NgModule({
   imports: [
@@ -57,7 +59,9 @@ import {MatCardModule} from '@angular/material/card';
     MatIconModule,
     MatToolbarModule,
     MatCardModule,
-    FormsModule
+    FormsModule,
+    MatCheckboxModule,
+    MatSortModule
   ],
   declarations: [
     AppComponent,

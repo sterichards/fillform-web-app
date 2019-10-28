@@ -8,6 +8,7 @@ import {sign} from '@app/_models/sign';
 import { MatInputModule, MatButtonModule, MatSelectModule, MatIconModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-audio',
@@ -15,18 +16,13 @@ import {MatTableDataSource} from '@angular/material/table';
   styleUrls: ['./audio.component.css']
 })
 export class AudioComponent implements OnInit {
-
-  angForm: FormGroup;
   uploadForm: FormGroup;
   routeType;
   dataSource;
+  @ViewChild(MatSort, null) sort: MatSort;
   private signId;
 
-  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'createdAt', 'location'];
-
-  formGroup = this.formBuilder.group({
-    file: [null, Validators.required]
-  });
+  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'listen'];
 
   constructor(
     private audio: AudioService,
@@ -35,30 +31,18 @@ export class AudioComponent implements OnInit {
     private httpClient: HttpClient,
     private route: ActivatedRoute
   ) {
-    this.createForm();
   }
 
   ngOnInit() {
-    this.audio.getAll().subscribe((branches) => {
-      this.dataSource = new MatTableDataSource(branches);
-    });
-
-    this.uploadForm = this.formBuilder.group({
-      profile: ['']
+    this.audio.getAll().subscribe((audios) => {
+      this.dataSource = new MatTableDataSource(audios);
+      this.dataSource.sort = this.sort;
     });
 
     this.route.data.subscribe(data => this.routeType = data.type);
 
     this.uploadForm = this.formBuilder.group({
       profile: ['']
-    });
-  }
-
-  createForm() {
-    this.angForm = this.formBuilder.group({
-      ProductName: ['', Validators.required],
-      ProductDescription: ['', Validators.required],
-      ProductPrice: ['', Validators.required]
     });
   }
 
