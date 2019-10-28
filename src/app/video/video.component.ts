@@ -1,10 +1,11 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
 import {VideoService} from '../_services/video.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {sign} from '@app/_models/sign';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-video',
@@ -16,23 +17,32 @@ export class VideoComponent implements OnInit {
   angForm: FormGroup;
   videos;
   uploadForm: FormGroup;
+  routeType;
+  dataSource;
   private signId;
+
+  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'createdAt', 'location'];
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]
   });
 
   constructor(
-    private video: VideoService,
+    private videoService: VideoService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private route: ActivatedRoute
   ) {
     this.createForm();
   }
 
   ngOnInit() {
-    this.video.getAll().subscribe(res => this.videos = res);
+    this.videoService.getAll().subscribe((branches) => {
+      this.dataSource = new MatTableDataSource(branches);
+    });
+
+    this.route.data.subscribe(data => this.routeType = data.type);
 
     this.uploadForm = this.formBuilder.group({
       profile: ['']
@@ -78,7 +88,7 @@ export class VideoComponent implements OnInit {
       formData.append('file', this.uploadForm.get('profile').value);
 
       this.httpClient.post(response.s3UploadUrl, formData).subscribe(s3UploadResponse => {
-        this.video.createVideo(this.signId, form.value.profile.name, 1).subscribe(repsonse => {
+        this.videoService.create(this.signId, form.value.profile.name, 1).subscribe(repsonse => {
           this.router.navigate(['/video']);
         });
       });

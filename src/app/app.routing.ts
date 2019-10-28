@@ -74,11 +74,13 @@ const routes: Routes = [
   },
   {
     path: 'users',
-    component: UsersComponent
+    component: UsersComponent,
+    data: { type: 'list' }
   },
   {
     path: 'users/new',
-    component: UsersComponent
+    component: UsersComponent,
+    data: { type: 'new' }
   },
 
   // otherwise redirect to home

@@ -1,10 +1,11 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
 import {DocumentService} from '../_services/document.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {sign} from '@app/_models/sign';
+import {MatTableDataSource} from "@angular/material/table";
 
 
 @Component({
@@ -15,9 +16,12 @@ import {sign} from '@app/_models/sign';
 export class DocumentComponent implements OnInit {
 
   angForm: FormGroup;
-  documents;
   uploadForm: FormGroup;
+  routeType;
+  dataSource;
   private signId;
+
+  displayedColumns = ['name', 'file.name', 'enabled', 'createdAt', 'location'];
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]
@@ -27,13 +31,18 @@ export class DocumentComponent implements OnInit {
     private document: DocumentService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private route: ActivatedRoute
   ) {
     this.createForm();
   }
 
   ngOnInit() {
-    this.document.getAll().subscribe(res => this.documents = res);
+    this.document.getAll().subscribe((branches) => {
+      this.dataSource = new MatTableDataSource(branches);
+    });
+
+    this.route.data.subscribe(data => this.routeType = data.type);
 
     this.uploadForm = this.formBuilder.group({
       profile: ['']

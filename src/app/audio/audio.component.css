@@ -1,8 +1,11 @@
-@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
-.example-month-picker .mat-calendar-period-button {
-  pointer-events: none;
+table {
+  width: 85%;
+  table-layout: fixed;
 }
 
-.example-month-picker .mat-calendar-arrow {
-  display: none;
+th, td {
+  overflow: hidden;
+  width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

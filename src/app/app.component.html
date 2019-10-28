@@ -1,18 +1,17 @@
 ﻿<!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
-  <div class="navbar-nav">
-    <a class="nav-item nav-link" routerLink="/">Home</a>
-    <a class="nav-item nav-link" routerLink="/admin" *ngIf="isAdmin">Admin</a>
+<mat-toolbar color="primary" *ngIf="currentUser">
+  <span>Happy Hints CMS</span>
+  <a mat-list-item [routerLink]="'/'">Home</a>
+  <a mat-list-item [routerLink]="'/admin'" *ngIf="isAdmin">Admin</a>
 
-    <a class="nav-item nav-link" routerLink="/audio">Audio</a>
-    <a class="nav-item nav-link" routerLink="/document">Document</a>
-    <a class="nav-item nav-link" routerLink="/video">Video</a>
+  <a mat-list-item [routerLink]="'/audio'">Audio</a>
+  <a mat-list-item [routerLink]="'/document'">Document</a>
+  <a mat-list-item [routerLink]="'/video'">Video</a>
 
-    <a class="nav-item nav-link" routerLink="/users">Users</a>
+  <a mat-list-item [routerLink]="'/users'">Users</a>
 
-    <a class="nav-item nav-link" (click)="logout()">Logout</a>
-  </div>
-</nav>
+  <a mat-list-item (click)="logout()">Logout</a>
+</mat-toolbar>
 
 <!-- main app container -->
 <div class="container">

@@ -7,6 +7,7 @@ import {environment} from '@environments/environment';
 import {sign} from '@app/_models/sign';
 import { MatInputModule, MatButtonModule, MatSelectModule, MatIconModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-audio',
@@ -16,18 +17,12 @@ import { FormsModule } from '@angular/forms';
 export class AudioComponent implements OnInit {
 
   angForm: FormGroup;
-  audios;
   uploadForm: FormGroup;
   routeType;
+  dataSource;
   private signId;
 
-  title = "app";
-  selectedValue: string = "";
-  items = [
-    { value: "0", view: "zero" },
-    { value: "1", view: "one" },
-    { value: "2", view: "Two" }
-  ];
+  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'createdAt', 'location'];
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]
@@ -44,7 +39,9 @@ export class AudioComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.audio.getAll().subscribe(res => {this.audios = res;});
+    this.audio.getAll().subscribe((branches) => {
+      this.dataSource = new MatTableDataSource(branches);
+    });
 
     this.uploadForm = this.formBuilder.group({
       profile: ['']
@@ -96,7 +93,7 @@ export class AudioComponent implements OnInit {
       formData.append('file', this.uploadForm.get('profile').value);
 
       this.httpClient.post(response.s3UploadUrl, formData).subscribe(s3UploadResponse => {
-        this.audio.createAudio(this.signId, form.value.profile.name, 1).subscribe(repsonse => {
+        this.audio.create(this.signId, form.value.profile.name, 1).subscribe(repsonse => {
           this.router.navigate(['/audio']);
         });
       });

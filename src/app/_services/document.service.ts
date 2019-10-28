@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { environment } from '@environments/environment';
+import {Observable} from 'rxjs';
+import {Document} from '@app/_models/document'  ;
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +11,10 @@ export class DocumentService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAll() {
+  getAll(): Observable<Document[]> {
+
     const params = new HttpParams().set('cms', 'true');
-    return this.httpClient.get(`${environment.apiUrl}/documents`, { params });
+    return this.httpClient.get<Document[]>(`${environment.apiUrl}/documents`, { params });
   }
 
   createDocument(fileId, fileName, orderValue) {

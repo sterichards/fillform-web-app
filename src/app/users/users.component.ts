@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {UsersService} from '../_services/users.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-users',
@@ -12,14 +13,18 @@ import {Location} from '@angular/common';
 export class UsersComponent implements OnInit {
   submitted = false;
   hide = true;
-  users;
+  routeType;
+  dataSource;
   newUserForm: FormGroup;
+
+  displayedColumns = ['username', 'forename', 'surname', 'enabled', 'createdAt'];
 
   constructor(
     private usersService: UsersService,
     private router: Router,
     private fb: FormBuilder,
-    private location: Location
+    private location: Location,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -27,20 +32,20 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.router.url === '/users') {
-      this.getUsers();
-    }
+    this.usersService.getAll().subscribe((branches) => {
+      this.dataSource = new MatTableDataSource(branches);
+    });
 
-    if (this.router.url === '/users/new') {
-      this.newUserForm = this.fb.group({
-        forename: ['', Validators.required],
-        surname: ['', Validators.required],
-        email: ['', Validators.required],
-        company: ['', Validators.required],
-        password: ['', Validators.required],
-        passwordVerify: ['', Validators.required],
-      });
-    }
+    this.route.data.subscribe(data => this.routeType = data.type);
+
+    this.newUserForm = this.fb.group({
+      forename: ['', Validators.required],
+      surname: ['', Validators.required],
+      email: ['', Validators.required],
+      company: ['', Validators.required],
+      password: ['', Validators.required],
+      passwordVerify: ['', Validators.required]
+    });
   }
 
   onReset() {
@@ -58,10 +63,6 @@ export class UsersComponent implements OnInit {
       this.newUserForm.value.password,
     );
 
-  }
-
-  getUsers() {
-    this.usersService.getAll().subscribe(res => this.users = res);
   }
 
   goBack() {

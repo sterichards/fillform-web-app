@@ -1,20 +1,11 @@
-.example-container {
-  display: flex;
-  flex-direction: column;
+table {
+  width: 85%;
+  table-layout: fixed;
 }
 
-.example-container > * {
-  width: 100%;
-}
-
-.example-container form {
-  margin-bottom: 20px;
-}
-
-.example-container form > * {
-  margin: 5px 0;
-}
-
-.example-container .mat-radio-button {
-  margin: 0 12px;
+th, td {
+  overflow: hidden;
+  width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
