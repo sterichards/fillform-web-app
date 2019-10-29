@@ -23,7 +23,7 @@ export class DocumentComponent implements OnInit {
   @ViewChild(MatSort, null) sort: MatSort;
   private signId;
 
-  displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'location'];
+  displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'location', 'edit'];
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]

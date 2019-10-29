@@ -22,7 +22,7 @@ export class VideoComponent implements OnInit {
   @ViewChild(MatSort, null) sort: MatSort;
   private signId;
 
-  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'watch'];
+  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'watch', 'edit'];
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]

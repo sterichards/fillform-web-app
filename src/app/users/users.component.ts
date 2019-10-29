@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {UsersService} from '../_services/users.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
 import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-users',
@@ -15,9 +16,10 @@ export class UsersComponent implements OnInit {
   hide = true;
   routeType;
   dataSource;
+  @ViewChild(MatSort, null) sort: MatSort;
   newUserForm: FormGroup;
 
-  displayedColumns = ['username', 'forename', 'surname', 'enabled', 'createdAt'];
+  displayedColumns = ['username', 'forename', 'surname', 'enabled', 'createdAt', 'edit'];
 
   constructor(
     private usersService: UsersService,
@@ -32,8 +34,9 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
 
-    this.usersService.getAll().subscribe((branches) => {
-      this.dataSource = new MatTableDataSource(branches);
+    this.usersService.getAll().subscribe((users) => {
+      this.dataSource = new MatTableDataSource(users);
+      this.dataSource.sort = this.sort;
     });
 
     this.route.data.subscribe(data => this.routeType = data.type);

@@ -32,8 +32,10 @@ import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatToolbar, MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatSortModule} from "@angular/material/sort";
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSortModule} from '@angular/material/sort';
+import {MatSliderModule} from '@angular/material/slider';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   imports: [
@@ -61,7 +63,10 @@ import {MatSortModule} from "@angular/material/sort";
     MatCardModule,
     FormsModule,
     MatCheckboxModule,
-    MatSortModule
+    MatSortModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    FormsModule
   ],
   declarations: [
     AppComponent,
