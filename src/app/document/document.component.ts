@@ -7,7 +7,7 @@ import {environment} from '@environments/environment';
 import {sign} from '@app/_models/sign';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import {Audio} from '@app/_models/audio';
+import {Document} from '@app/_models/document';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 
@@ -24,7 +24,7 @@ export class DocumentComponent implements OnInit {
   dataSource;
   documentItem;
   @ViewChild(MatSort, null) sort: MatSort;
-  @ViewChild('table', null) table: MatTable<Audio>;
+  @ViewChild('table', null) table: MatTable<Document>;
   private signId;
 
   displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'location', 'edit'];
@@ -47,15 +47,15 @@ export class DocumentComponent implements OnInit {
     }
 
     if (this.routeType === 'list') {
-      this.document.getAll().subscribe((audios) => {
-        this.dataSource = new MatTableDataSource(audios);
+      this.document.getAll().subscribe((documents) => {
+        this.dataSource = new MatTableDataSource(documents);
         this.dataSource.sort = this.sort;
       });
     }
 
     if (this.routeType === 'edit') {
-      this.document.getSingle(1).subscribe((audio) => {
-        this.documentItem = audio;
+      this.document.getSingle(1).subscribe((document) => {
+        this.documentItem = document;
       });
     }
 
@@ -92,8 +92,8 @@ export class DocumentComponent implements OnInit {
     });
   }
 
-  removeAudio() {
-    this.snackBar.open('Audio ' + this.documentItem.file.fileName + ' removed', '', {
+  removeDocument() {
+    this.snackBar.open('Document ' + this.documentItem.file.fileName + ' removed', '', {
       duration: 2000,
     });
     this.documentItem.file = null;
@@ -124,7 +124,7 @@ export class DocumentComponent implements OnInit {
       formData.append('X-Amz-Signature', signResponse.s3PostPolicySignature);
       formData.append('file', this.uploadForm.get('profile').value);
 
-      this.snackBar.open('Uploading audio...', '', {
+      this.snackBar.open('Uploading document...', '', {
         duration: 2000,
       });
 

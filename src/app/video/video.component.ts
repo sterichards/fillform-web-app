@@ -5,8 +5,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {sign} from '@app/_models/sign';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatSort, MatSortModule} from "@angular/material/sort";
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
+import {Video} from '@app/_models/video';
 
 @Component({
   selector: 'app-video',
@@ -14,12 +17,13 @@ import {MatSort, MatSortModule} from "@angular/material/sort";
   styleUrls: ['./video.component.css']
 })
 export class VideoComponent implements OnInit {
-
-  angForm: FormGroup;
+  
   uploadForm: FormGroup;
   routeType;
   dataSource;
+  videoItem;
   @ViewChild(MatSort, null) sort: MatSort;
+  @ViewChild('table', null) table: MatTable<Video>;
   private signId;
 
   displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'watch', 'edit'];
@@ -29,73 +33,108 @@ export class VideoComponent implements OnInit {
   });
 
   constructor(
-    private videoService: VideoService,
+    private video: VideoService,
     private router: Router,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
-    private route: ActivatedRoute
-  ) {
-    this.createForm();
-  }
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
 
-    this.videoService.getAll().subscribe((videos) => {
-      this.dataSource = new MatTableDataSource(videos);
-      this.dataSource.sort = this.sort;
-    });
-
-
     this.route.data.subscribe(data => this.routeType = data.type);
+
+    if (this.routeType === 'new') {
+      this.videoItem = {};
+    }
+
+    if (this.routeType === 'list') {
+      this.video.getAll().subscribe((videos) => {
+        this.dataSource = new MatTableDataSource(videos);
+        this.dataSource.sort = this.sort;
+      });
+    }
+
+    if (this.routeType === 'edit') {
+      this.video.getSingle(1).subscribe((video) => {
+        this.videoItem = video;
+      });
+    }
 
     this.uploadForm = this.formBuilder.group({
       profile: ['']
     });
   }
 
-  createForm() {
-    this.angForm = this.formBuilder.group({
-      ProductName: ['', Validators.required],
-      ProductDescription: ['', Validators.required],
-      ProductPrice: ['', Validators.required]
+  onSubmit(form: NgForm) {
+    if (this.routeType === 'new') {
+      this.createVideo(form);
+    }
+
+    if (this.routeType === 'edit') {
+      this.updateVideo(form);
+    }
+  }
+
+  updateVideo(form) {
+    this.video.update(form, this.videoItem.id).subscribe(response => {
+      this.snackBar.open(this.videoItem.name + ' has been saved', '', {
+        duration: 2000,
+      });
+      this.router.navigate(['/videos']);
     });
   }
 
-  onFileSelect(event) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.uploadForm.get('profile').setValue(file);
-    }
+  createVideo(form) {
+    this.video.create(form).subscribe(response => {
+      this.snackBar.open(this.videoItem.name + ' has been created', '', {
+        duration: 2000,
+      });
+      this.router.navigate(['/videos']);
+    });
   }
 
-  onSubmit(form: NgForm) {
+  removeVideo() {
+    this.snackBar.open('Video ' + this.videoItem.file.fileName + ' removed', '', {
+      duration: 2000,
+    });
+    this.videoItem.file = null;
+  }
+
+  uploadFile(fileInput: any) {
+    const fileData = <File> fileInput.target.files[0];
+
     const body = {
-      fileName: form.value.profile.name,
-      fileSize: form.value.profile.size,
-      mimeType: form.value.profile.type,
+      fileName: fileData.name,
+      fileSize: fileData.size,
+      mimeType: fileData.type,
     }
 
-    this.httpClient.post(`${environment.apiUrl}/files/sign`, body).subscribe((response: sign) => {
+    this.httpClient.post(`${environment.apiUrl}/files/sign`, body).subscribe((signResponse: sign) => {
 
       // Set the sign Id
-      this.signId = response.id;
+      this.signId = signResponse.id;
 
       let formData = new FormData();
 
-      response.s3PostPolicy.conditions.forEach(signItem => {
+      signResponse.s3PostPolicy.conditions.forEach(signItem => {
         const objKey = Object.keys(signItem);
         formData.append(objKey[0], signItem[objKey[0]]);
       });
 
-      formData.append('policy', response.s3PostPolicyEncodedString);
-      formData.append('X-Amz-Signature', response.s3PostPolicySignature);
+      formData.append('policy', signResponse.s3PostPolicyEncodedString);
+      formData.append('X-Amz-Signature', signResponse.s3PostPolicySignature);
       formData.append('file', this.uploadForm.get('profile').value);
 
-      this.httpClient.post(response.s3UploadUrl, formData).subscribe(s3UploadResponse => {
-        this.videoService.create(this.signId, form.value.profile.name, 1).subscribe(repsonse => {
-          this.router.navigate(['/video']);
-        });
+      this.snackBar.open('Uploading video...', '', {
+        duration: 2000,
       });
+
+      this.httpClient.post(signResponse.s3UploadUrl, formData).subscribe(s3UploadResponse => {});
+
+      this.videoItem.file = signResponse;
     });
   }
 }

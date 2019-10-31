@@ -53,14 +53,42 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 
-<!-- Document uploader -->
-<div *ngIf="router.url == '/document/new'">
-  <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit(uploadForm)">
+<!-- Edit or New -->
+<div *ngIf="routeType == 'edit' || routeType == 'new'">
+
+  <h2>{{routeType | titlecase}} Document</h2>
+
+  <form #createDocumentForm='ngForm' (ngSubmit)="onSubmit(createDocumentForm)">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input  matInput  placeholder="Name" name="name" [(ngModel)]="documentItem.name" required>
+    </mat-form-field><br/>
+
+    <mat-form-field>
+      <mat-label>Go Live Date</mat-label>
+      <input  matInput [matDatepicker]="myPicker"  placeholder="date" name="goLiveDate" [(ngModel)]="documentItem.goLiveDate" required>
+      <mat-datepicker-toggle  matSuffix [for]="myPicker"></mat-datepicker-toggle>
+      <mat-datepicker #myPicker></mat-datepicker>
+    </mat-form-field><br/>
+
+    <mat-checkbox [checked]="documentItem.enabled" name="enabled" [(ngModel)]="documentItem.enabled">Enabled</mat-checkbox><br/><br/>
+
     <div>
-      <input type="file" name="profile" accept=".pdf"(change)="onFileSelect($event)" />
+      <!-- Show file uploader -->
+      <input *ngIf="!documentItem.file" type="file" accept=".pdf" name="fileUpload" (change)="this.uploadFile($event)" />
+
+      <!-- Show document file (edit route only)-->
+      <p *ngIf="documentItem.file&&routeType == 'edit'">File: {{documentItem.file.fileName}} <i class="material-icons" style="cursor: pointer;" (click)="removeDocument();">delete_forever</i></p>
+
+      <input type="hidden" name="file" [(ngModel)]="documentItem.file"/>
     </div>
+
+    <input type="hidden" name="order" [(ngModel)]="documentItem.order"/><br/>
+
     <div>
-      <button type="submit">Upload</button>
+      <button mat-flat-button color="primary" type="submit" *ngIf="routeType == 'edit'">Update</button>
+      <button mat-flat-button color="primary" type="submit" *ngIf="routeType == 'new'">Create</button>
+      &nbsp;<button mat-flat-button color="primary" (click)="router.navigate(['/documents'])">Cancel</button>
     </div>
   </form>
 </div>

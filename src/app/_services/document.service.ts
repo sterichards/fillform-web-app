@@ -21,8 +21,7 @@ export class DocumentService {
     return this.httpClient.get<Document[]>(`${environment.apiUrl}/documents/` + id);
   }
 
-  create(form)
-  {
+  create(form) {
     const body = {
       file: form.value.file.id,
       name: form.value.name,
@@ -33,8 +32,7 @@ export class DocumentService {
     return this.httpClient.post(`${environment.apiUrl}/documents`, body);
   }
 
-  update(form, entityId)
-  {
+  update(form, entityId) {
     const body = {
       file: form.value.file.id,
       name: form.value.name,
