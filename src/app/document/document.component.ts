@@ -2,12 +2,14 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
 import {DocumentService} from '../_services/document.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {sign} from '@app/_models/sign';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatSort} from "@angular/material/sort";
-
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {Audio} from '@app/_models/audio';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-document',
@@ -20,81 +22,115 @@ export class DocumentComponent implements OnInit {
   uploadForm: FormGroup;
   routeType;
   dataSource;
+  documentItem;
   @ViewChild(MatSort, null) sort: MatSort;
+  @ViewChild('table', null) table: MatTable<Audio>;
   private signId;
 
   displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'location', 'edit'];
-
-  formGroup = this.formBuilder.group({
-    file: [null, Validators.required]
-  });
 
   constructor(
     private document: DocumentService,
     private router: Router,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
-    private route: ActivatedRoute
-  ) {
-    this.createForm();
-  }
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
-    this.document.getAll().subscribe((documents) => {
-      this.dataSource = new MatTableDataSource(documents);
-      this.dataSource.sort = this.sort;
-    });
-
     this.route.data.subscribe(data => this.routeType = data.type);
+
+    if (this.routeType === 'new') {
+      this.documentItem = {};
+    }
+
+    if (this.routeType === 'list') {
+      this.document.getAll().subscribe((audios) => {
+        this.dataSource = new MatTableDataSource(audios);
+        this.dataSource.sort = this.sort;
+      });
+    }
+
+    if (this.routeType === 'edit') {
+      this.document.getSingle(1).subscribe((audio) => {
+        this.documentItem = audio;
+      });
+    }
 
     this.uploadForm = this.formBuilder.group({
       profile: ['']
     });
   }
 
-  createForm() {
-    this.angForm = this.formBuilder.group({
-      ProductName: ['', Validators.required],
-      ProductDescription: ['', Validators.required],
-      ProductPrice: ['', Validators.required]
+  onSubmit(form: NgForm) {
+    if (this.routeType === 'new') {
+      this.createDocument(form);
+    }
+
+    if (this.routeType === 'edit') {
+      this.updateDocument(form);
+    }
+  }
+
+  updateDocument(form) {
+    this.document.update(form, this.documentItem.id).subscribe(response => {
+      this.snackBar.open(this.documentItem.name + ' has been saved', '', {
+        duration: 2000,
+      });
+      this.router.navigate(['/documents']);
     });
   }
 
-  onFileSelect(event) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.uploadForm.get('profile').setValue(file);
-    }
+  createDocument(form) {
+    this.document.create(form).subscribe(response => {
+      this.snackBar.open(this.documentItem.name + ' has been created', '', {
+        duration: 2000,
+      });
+      this.router.navigate(['/documents']);
+    });
   }
 
-  onSubmit(form: NgForm) {
+  removeAudio() {
+    this.snackBar.open('Audio ' + this.documentItem.file.fileName + ' removed', '', {
+      duration: 2000,
+    });
+    this.documentItem.file = null;
+  }
+
+  uploadFile(fileInput: any) {
+    const fileData = <File> fileInput.target.files[0];
+
     const body = {
-      fileName: form.value.profile.name,
-      fileSize: form.value.profile.size,
-      mimeType: form.value.profile.type,
+      fileName: fileData.name,
+      fileSize: fileData.size,
+      mimeType: fileData.type,
     }
 
-    this.httpClient.post(`${environment.apiUrl}/files/sign`, body).subscribe((response: sign) => {
+    this.httpClient.post(`${environment.apiUrl}/files/sign`, body).subscribe((signResponse: sign) => {
 
       // Set the sign Id
-      this.signId = response.id;
+      this.signId = signResponse.id;
 
       let formData = new FormData();
 
-      response.s3PostPolicy.conditions.forEach(signItem => {
+      signResponse.s3PostPolicy.conditions.forEach(signItem => {
         const objKey = Object.keys(signItem);
         formData.append(objKey[0], signItem[objKey[0]]);
       });
 
-      formData.append('policy', response.s3PostPolicyEncodedString);
-      formData.append('X-Amz-Signature', response.s3PostPolicySignature);
+      formData.append('policy', signResponse.s3PostPolicyEncodedString);
+      formData.append('X-Amz-Signature', signResponse.s3PostPolicySignature);
       formData.append('file', this.uploadForm.get('profile').value);
 
-      this.httpClient.post(response.s3UploadUrl, formData).subscribe(s3UploadResponse => {
-        this.document.createDocument(this.signId, form.value.profile.name, 1).subscribe(repsonse => {
-          this.router.navigate(['/document']);
-        });
+      this.snackBar.open('Uploading audio...', '', {
+        duration: 2000,
       });
+
+      this.httpClient.post(signResponse.s3UploadUrl, formData).subscribe(s3UploadResponse => {});
+
+      this.documentItem.file = signResponse;
     });
   }
 

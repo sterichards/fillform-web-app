@@ -95,19 +95,20 @@
 
     <div>
       <!-- Show file uploader -->
-      <input type="file" name="file" accept=".mp3" [(ngModel)]="audioItem.file" (change)="uploadFile(createAudioForm)" />
+      <input *ngIf="!audioItem.file" type="file" accept=".mp3" name="fileUpload" (change)="this.uploadFile($event)" />
 
-      <!-- Show audio file -->
-      <p>File: {{audioItem.file.fileName}} <i class="material-icons" style="cursor: pointer;" (click)="removeAudio();">delete_forever</i></p>
-      <!--<input type="hidden" name="_file" [(ngModel)]="audioItem.file"/>-->
+      <!-- Show audio file (edit route only)-->
+      <p *ngIf="audioItem.file&&routeType == 'edit'">File: {{audioItem.file.fileName}} <i class="material-icons" style="cursor: pointer;" (click)="removeAudio();">delete_forever</i></p>
+
+      <input type="hidden" name="file" [(ngModel)]="audioItem.file"/>
     </div>
 
-    <input type="hidden" name="order" [(ngModel)]="audioItem.order"/>
+    <input type="hidden" name="order" [(ngModel)]="audioItem.order"/><br/>
 
     <div>
-      <button type="submit" *ngIf="routeType == 'edit'">Update</button>
-      <button type="submit" *ngIf="routeType == 'new'">Create</button>
+      <button mat-flat-button color="primary" type="submit" *ngIf="routeType == 'edit'">Update</button>
+      <button mat-flat-button color="primary" type="submit" *ngIf="routeType == 'new'">Create</button>
+      &nbsp;<button mat-flat-button color="primary" (click)="router.navigate(['/audio'])">Cancel</button>
     </div>
   </form>
 </div>
-

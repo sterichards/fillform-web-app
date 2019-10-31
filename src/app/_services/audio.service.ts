@@ -22,14 +22,14 @@ export class AudioService {
     return this.httpClient.get<Audio[]>(`${environment.apiUrl}/audio/` + id);
   }
 
-  create(file, fileName, orderValue, goLiveDate, enabled) {
-
+  create(form)
+  {
     const body = {
-      file: file.id,
-      name: fileName,
-      order: orderValue,
-      goLiveDate: goLiveDate,
-      enabled: enabled
+      file: form.value.file.id,
+      name: form.value.name,
+      order: form.value.order,
+      goLiveDate: form.value.goLiveDate,
+      enabled: form.value.enabled
     }
     return this.httpClient.post(`${environment.apiUrl}/audio`, body);
   }

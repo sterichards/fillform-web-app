@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { environment } from '@environments/environment';
 import {Observable} from 'rxjs';
-import {Document} from '@app/_models/document'  ;
+import {Document} from '@app/_models/document';
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +14,34 @@ export class DocumentService {
   getAll(): Observable<Document[]> {
 
     const params = new HttpParams().set('cms', 'true');
-    return this.httpClient.get<Document[]>(`${environment.apiUrl}/documents`, { params });
+    return this.httpClient.get<Document[]>(`${environment.apiUrl}/documents`, {params});
   }
 
-  createDocument(fileId, fileName, orderValue) {
+  getSingle(id) {
+    return this.httpClient.get<Document[]>(`${environment.apiUrl}/documents/` + id);
+  }
 
+  create(form)
+  {
     const body = {
-      file: fileId,
-      name: fileName,
-      order: orderValue
+      file: form.value.file.id,
+      name: form.value.name,
+      order: form.value.order,
+      goLiveDate: form.value.goLiveDate,
+      enabled: form.value.enabled
     }
     return this.httpClient.post(`${environment.apiUrl}/documents`, body);
+  }
+
+  update(form, entityId)
+  {
+    const body = {
+      file: form.value.file.id,
+      name: form.value.name,
+      order: form.value.order,
+      goLiveDate: form.value.goLiveDate,
+      enabled: form.value.enabled
+    }
+    return this.httpClient.put(`${environment.apiUrl}/documents/` + entityId, body);
   }
 }

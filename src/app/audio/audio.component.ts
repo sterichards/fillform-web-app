@@ -10,7 +10,7 @@ import {MatSort} from '@angular/material/sort';
 import {Audio} from '@app/_models/audio';
 import {CdkDragDrop, moveItemInArray, transferArrayItem, CdkDragHandle} from '@angular/cdk/drag-drop';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-audio',
@@ -44,6 +44,7 @@ export class AudioComponent implements OnInit {
     this.route.data.subscribe(data => this.routeType = data.type);
 
     if (this.routeType === 'new') {
+      this.audioItem = {};
     }
 
     if (this.routeType === 'list') {
@@ -64,15 +65,7 @@ export class AudioComponent implements OnInit {
     });
   }
 
-  onFileSelect(event) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.uploadForm.get('profile').setValue(file);
-    }
-  }
-
-  onSubmit(form: NgForm)
-  {
+  onSubmit(form: NgForm) {
     if (this.routeType === 'new') {
       this.createAudio(form);
     }
@@ -80,24 +73,40 @@ export class AudioComponent implements OnInit {
     if (this.routeType === 'edit') {
       this.updateAudio(form);
     }
-
   }
 
-  updateAudio(form)
-  {
+  updateAudio(form) {
     this.audio.update(form, this.audioItem.id).subscribe(response => {
+      this.snackBar.open(this.audioItem.name + ' has been saved', '', {
+        duration: 2000,
+      });
       this.router.navigate(['/audio']);
     });
   }
 
-  createAudio(form)
-  {
-    console.log(form);
+  createAudio(form) {
+    this.audio.create(form).subscribe(response => {
+      this.snackBar.open(this.audioItem.name + ' has been created', '', {
+        duration: 2000,
+      });
+      this.router.navigate(['/audio']);
+    });
+  }
+
+  removeAudio() {
+    this.snackBar.open('Audio ' + this.audioItem.file.fileName + ' removed', '', {
+      duration: 2000,
+    });
+    this.audioItem.file = null;
+  }
+
+  uploadFile(fileInput: any) {
+    const fileData = <File> fileInput.target.files[0];
 
     const body = {
-      fileName: form.value.profile.name,
-      fileSize: form.value.profile.size,
-      mimeType: form.value.profile.type,
+      fileName: fileData.name,
+      fileSize: fileData.size,
+      mimeType: fileData.type,
     }
 
     this.httpClient.post(`${environment.apiUrl}/files/sign`, body).subscribe((signResponse: sign) => {
@@ -116,53 +125,13 @@ export class AudioComponent implements OnInit {
       formData.append('X-Amz-Signature', signResponse.s3PostPolicySignature);
       formData.append('file', this.uploadForm.get('profile').value);
 
-      this.httpClient.post(signResponse.s3UploadUrl, formData).subscribe(s3UploadResponse => {
-        this.audio.create(signResponse, form.value.profile.name, 1, true, true).subscribe(audioCreateResponse => {
-          this.router.navigate(['/audio']);
-        });
-      });
-    });
-  }
-
-  removeAudio()
-  {
-    this.snackBar.open('Audio ' + this.audioItem.file.fileName + ' removed', '', {
-      duration: 2000,
-    });
-    this.audioItem.file = null;
-  }
-
-  uploadFile(file)
-  {
-    console.log('file');
-    console.log(file);
-    const body = {
-      fileName: form.value.profile.name,
-      fileSize: form.value.profile.size,
-      mimeType: form.value.profile.type,
-    }
-
-    this.httpClient.post(`${environment.apiUrl}/files/sign`, body).subscribe((response: sign) => {
-
-      // Set the sign Id
-      this.signId = response.id;
-
-      let formData = new FormData();
-
-      response.s3PostPolicy.conditions.forEach(signItem => {
-        const objKey = Object.keys(signItem);
-        formData.append(objKey[0], signItem[objKey[0]]);
+      this.snackBar.open('Uploading audio...', '', {
+        duration: 2000,
       });
 
-      formData.append('policy', response.s3PostPolicyEncodedString);
-      formData.append('X-Amz-Signature', response.s3PostPolicySignature);
-      formData.append('file', this.uploadForm.get('profile').value);
+      this.httpClient.post(signResponse.s3UploadUrl, formData).subscribe(s3UploadResponse => {});
 
-      this.httpClient.post(response.s3UploadUrl, formData).subscribe(s3UploadResponse => {
-        this.audio.create(sign, form.value.profile.name, 1, true, true).subscribe(audioCreateResponse => {
-          this.router.navigate(['/audio']);
-        });
-      });
+      this.audioItem.file = signResponse;
     });
   }
 
