@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, NgForm} from '@angular/forms';
 import {AudioService} from '../_services/audio.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -9,7 +9,8 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {Audio} from '@app/_models/audio';
 import {CdkDragDrop, moveItemInArray, transferArrayItem, CdkDragHandle} from '@angular/cdk/drag-drop';
-import { FormsModule } from '@angular/forms';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-audio',
@@ -32,7 +33,9 @@ export class AudioComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -68,14 +71,13 @@ export class AudioComponent implements OnInit {
     }
   }
 
-  onSubmit(form: NgForm) {
-
+  onSubmit(form: NgForm)
+  {
     if (this.routeType === 'new') {
       this.createAudio(form);
     }
 
     if (this.routeType === 'edit') {
-      console.log(form);
       this.updateAudio(form);
     }
 
@@ -83,13 +85,57 @@ export class AudioComponent implements OnInit {
 
   updateAudio(form)
   {
-    this.audio.update(this.signId, form.value.name, 1, form.value.goLiveDate, form.value.enabled, this.audioItem.id).subscribe(response => {
-      console.log(response);
+    this.audio.update(form, this.audioItem.id).subscribe(response => {
+      this.router.navigate(['/audio']);
     });
   }
 
   createAudio(form)
   {
+    console.log(form);
+
+    const body = {
+      fileName: form.value.profile.name,
+      fileSize: form.value.profile.size,
+      mimeType: form.value.profile.type,
+    }
+
+    this.httpClient.post(`${environment.apiUrl}/files/sign`, body).subscribe((signResponse: sign) => {
+
+      // Set the sign Id
+      this.signId = signResponse.id;
+
+      let formData = new FormData();
+
+      signResponse.s3PostPolicy.conditions.forEach(signItem => {
+        const objKey = Object.keys(signItem);
+        formData.append(objKey[0], signItem[objKey[0]]);
+      });
+
+      formData.append('policy', signResponse.s3PostPolicyEncodedString);
+      formData.append('X-Amz-Signature', signResponse.s3PostPolicySignature);
+      formData.append('file', this.uploadForm.get('profile').value);
+
+      this.httpClient.post(signResponse.s3UploadUrl, formData).subscribe(s3UploadResponse => {
+        this.audio.create(signResponse, form.value.profile.name, 1, true, true).subscribe(audioCreateResponse => {
+          this.router.navigate(['/audio']);
+        });
+      });
+    });
+  }
+
+  removeAudio()
+  {
+    this.snackBar.open('Audio ' + this.audioItem.file.fileName + ' removed', '', {
+      duration: 2000,
+    });
+    this.audioItem.file = null;
+  }
+
+  uploadFile(file)
+  {
+    console.log('file');
+    console.log(file);
     const body = {
       fileName: form.value.profile.name,
       fileSize: form.value.profile.size,
@@ -113,7 +159,7 @@ export class AudioComponent implements OnInit {
       formData.append('file', this.uploadForm.get('profile').value);
 
       this.httpClient.post(response.s3UploadUrl, formData).subscribe(s3UploadResponse => {
-        this.audio.create(this.signId, form.value.profile.name, 1, true, true).subscribe(audioCreateResponse => {
+        this.audio.create(sign, form.value.profile.name, 1, true, true).subscribe(audioCreateResponse => {
           this.router.navigate(['/audio']);
         });
       });

@@ -86,16 +86,23 @@
 
     <mat-form-field>
       <mat-label>Go Live Date</mat-label>
-      <input  matInput [matDatepicker]="myPicker"  placeholder="date" name="goLiveDate"[(ngModel)]="audioItem.goLiveDate" required>
+      <input  matInput [matDatepicker]="myPicker"  placeholder="date" name="goLiveDate" [(ngModel)]="audioItem.goLiveDate" required>
       <mat-datepicker-toggle  matSuffix [for]="myPicker"></mat-datepicker-toggle>
       <mat-datepicker #myPicker></mat-datepicker>
     </mat-form-field><br/>
 
-    <mat-checkbox [checked]="audioItem.enabled" name="enabled"[(ngModel)]="audioItem.enabled">Enabled</mat-checkbox><br/><br/>
+    <mat-checkbox [checked]="audioItem.enabled" name="enabled" [(ngModel)]="audioItem.enabled">Enabled</mat-checkbox><br/><br/>
 
     <div>
-      <input type="file" name="profile" accept=".mp3" (change)="onFileSelect($event)"/>
+      <!-- Show file uploader -->
+      <input type="file" name="file" accept=".mp3" [(ngModel)]="audioItem.file" (change)="uploadFile(createAudioForm)" />
+
+      <!-- Show audio file -->
+      <p>File: {{audioItem.file.fileName}} <i class="material-icons" style="cursor: pointer;" (click)="removeAudio();">delete_forever</i></p>
+      <!--<input type="hidden" name="_file" [(ngModel)]="audioItem.file"/>-->
     </div>
+
+    <input type="hidden" name="order" [(ngModel)]="audioItem.order"/>
 
     <div>
       <button type="submit" *ngIf="routeType == 'edit'">Update</button>
@@ -103,3 +110,4 @@
     </div>
   </form>
 </div>
+

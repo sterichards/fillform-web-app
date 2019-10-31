@@ -3,9 +3,6 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
 import {Audio} from '@app/_models/audio';
-import * as _moment from 'moment';
-import {default as _rollupMoment} from 'moment';
-const moment = _rollupMoment || _moment;
 
 @Injectable({
   providedIn: 'root'
@@ -25,30 +22,26 @@ export class AudioService {
     return this.httpClient.get<Audio[]>(`${environment.apiUrl}/audio/` + id);
   }
 
-  create(fileId, fileName, orderValue, goLiveDate, enabled) {
-
-    const formattedGoLiveDate = moment(goLiveDate).format('YYYY-MM-DD HH:MM');
+  create(file, fileName, orderValue, goLiveDate, enabled) {
 
     const body = {
-      file: fileId,
+      file: file.id,
       name: fileName,
       order: orderValue,
-      goLiveDate: formattedGoLiveDate,
+      goLiveDate: goLiveDate,
       enabled: enabled
     }
     return this.httpClient.post(`${environment.apiUrl}/audio`, body);
   }
 
-  update(fileId, fileName, orderValue, goLiveDate, enabled, entityId) {
-
-    const formattedGoLiveDate = moment(goLiveDate).format('YYYY-MM-DD HH:MM');
-
+  update(form, entityId)
+  {
     const body = {
-      file: fileId,
-      name: fileName,
-      order: orderValue,
-      goLiveDate: goLiveDate,
-      enabled: enabled
+      file: form.value.file.id,
+      name: form.value.name,
+      order: form.value.order,
+      goLiveDate: form.value.goLiveDate,
+      enabled: form.value.enabled
     }
     return this.httpClient.put(`${environment.apiUrl}/audio/` + entityId, body);
   }
