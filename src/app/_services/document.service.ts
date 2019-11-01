@@ -44,6 +44,6 @@ export class DocumentService {
   }
 
   delete(id) {
-    return this.httpClient.delete(`${environment.apiUrl}/documents` + id);
+    return this.httpClient.delete(`${environment.apiUrl}/documents/` + id);
   }
 }

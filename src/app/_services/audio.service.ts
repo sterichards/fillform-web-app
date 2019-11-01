@@ -45,6 +45,6 @@ export class AudioService {
   }
 
   delete(id) {
-    return this.httpClient.delete(`${environment.apiUrl}/audio` + id);
+    return this.httpClient.delete(`${environment.apiUrl}/audio/` + id);
   }
 }
