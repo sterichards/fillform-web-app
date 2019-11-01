@@ -10,6 +10,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {Video} from '@app/_models/video';
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-video',
@@ -17,16 +18,17 @@ import {Video} from '@app/_models/video';
   styleUrls: ['./video.component.css']
 })
 export class VideoComponent implements OnInit {
-  
   uploadForm: FormGroup;
   routeType;
   dataSource;
   videoItem;
   @ViewChild(MatSort, null) sort: MatSort;
   @ViewChild('table', null) table: MatTable<Video>;
+  @ViewChild(MatPaginator, null) paginator: MatPaginator;
   private signId;
+  showConfirmDelete = [];
 
-  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'watch', 'edit'];
+  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'watch', 'edit', 'delete'];
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]
@@ -53,12 +55,13 @@ export class VideoComponent implements OnInit {
     if (this.routeType === 'list') {
       this.video.getAll().subscribe((videos) => {
         this.dataSource = new MatTableDataSource(videos);
+        this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
     }
 
     if (this.routeType === 'edit') {
-      this.video.getSingle(1).subscribe((video) => {
+      this.video.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((video) => {
         this.videoItem = video;
       });
     }
@@ -83,7 +86,7 @@ export class VideoComponent implements OnInit {
       this.snackBar.open(this.videoItem.name + ' has been saved', '', {
         duration: 2000,
       });
-      this.router.navigate(['/videos']);
+      this.router.navigate(['/video']);
     });
   }
 
@@ -92,15 +95,30 @@ export class VideoComponent implements OnInit {
       this.snackBar.open(this.videoItem.name + ' has been created', '', {
         duration: 2000,
       });
-      this.router.navigate(['/videos']);
+      this.router.navigate(['/video']);
     });
   }
 
-  removeVideo() {
+  removeFileFromVideo() {
     this.snackBar.open('Video ' + this.videoItem.file.fileName + ' removed', '', {
       duration: 2000,
     });
     this.videoItem.file = null;
+  }
+
+  deleteVideo(element) {
+    this.video.delete(element.id).subscribe(response => {
+
+      // Remove row from table
+      const index = this.dataSource.data.indexOf(element);
+      this.dataSource.data.splice(index, 1);
+      this.dataSource._updateChangeSubscription();
+
+      // Notification popup
+      this.snackBar.open('Video ' + element.name + ' removed', '', {
+        duration: 2000,
+      });
+    });
   }
 
   uploadFile(fileInput: any) {
@@ -126,7 +144,7 @@ export class VideoComponent implements OnInit {
 
       formData.append('policy', signResponse.s3PostPolicyEncodedString);
       formData.append('X-Amz-Signature', signResponse.s3PostPolicySignature);
-      formData.append('file', this.uploadForm.get('profile').value);
+      formData.append('file', fileData);
 
       this.snackBar.open('Uploading video...', '', {
         duration: 2000,

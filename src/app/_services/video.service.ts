@@ -14,16 +14,36 @@ export class VideoService {
   getAll(): Observable<Video[]> {
 
     const params = new HttpParams().set('cms', 'true');
-    return this.httpClient.get<Video[]>(`${environment.apiUrl}/videos`, { params });
+    return this.httpClient.get<Video[]>(`${environment.apiUrl}/videos`, {params});
   }
 
-  create(fileId, fileName, orderValue) {
+  getSingle(id) {
+    return this.httpClient.get<Video[]>(`${environment.apiUrl}/videos/` + id);
+  }
 
+  create(form) {
     const body = {
-      file: fileId,
-      name: fileName,
-      order: orderValue
+      file: form.value.file.id,
+      name: form.value.name,
+      order: form.value.order,
+      goLiveDate: form.value.goLiveDate,
+      enabled: form.value.enabled
     }
     return this.httpClient.post(`${environment.apiUrl}/videos`, body);
+  }
+
+  update(form, entityId) {
+    const body = {
+      file: form.value.file.id,
+      name: form.value.name,
+      order: form.value.order,
+      goLiveDate: form.value.goLiveDate,
+      enabled: form.value.enabled
+    }
+    return this.httpClient.put(`${environment.apiUrl}/videos/` + entityId, body);
+  }
+
+  delete(id) {
+    return this.httpClient.delete(`${environment.apiUrl}/videos/` + id);
   }
 }

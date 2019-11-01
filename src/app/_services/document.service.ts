@@ -42,4 +42,8 @@ export class DocumentService {
     }
     return this.httpClient.put(`${environment.apiUrl}/documents/` + entityId, body);
   }
+
+  delete(id) {
+    return this.httpClient.delete(`${environment.apiUrl}/documents` + id);
+  }
 }

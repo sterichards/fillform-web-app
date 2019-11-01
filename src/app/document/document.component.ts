@@ -26,8 +26,9 @@ export class DocumentComponent implements OnInit {
   @ViewChild(MatSort, null) sort: MatSort;
   @ViewChild('table', null) table: MatTable<Document>;
   private signId;
+  showConfirmDelete = [];
 
-  displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'location', 'edit'];
+  displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'location', 'edit', 'delete'];
 
   constructor(
     private document: DocumentService,
@@ -54,7 +55,7 @@ export class DocumentComponent implements OnInit {
     }
 
     if (this.routeType === 'edit') {
-      this.document.getSingle(1).subscribe((document) => {
+      this.document.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((document) => {
         this.documentItem = document;
       });
     }
@@ -92,11 +93,26 @@ export class DocumentComponent implements OnInit {
     });
   }
 
-  removeDocument() {
+  removeFileFromDocument() {
     this.snackBar.open('Document ' + this.documentItem.file.fileName + ' removed', '', {
       duration: 2000,
     });
     this.documentItem.file = null;
+  }
+
+  deleteDocument(element) {
+    this.document.delete(element.id).subscribe(response => {
+
+      // Remove row from table
+      const index = this.dataSource.data.indexOf(element);
+      this.dataSource.data.splice(index, 1);
+      this.dataSource._updateChangeSubscription();
+
+      // Notification popup
+      this.snackBar.open('Video ' + element.name + ' removed', '', {
+        duration: 2000,
+      });
+    });
   }
 
   uploadFile(fileInput: any) {

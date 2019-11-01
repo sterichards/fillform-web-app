@@ -69,6 +69,14 @@
     <td mat-cell *matCellDef="let element"><i class="material-icons" style="cursor: pointer;" title="Edit" (click)="this.router.navigate(['/audio/edit/'+element.id]);">edit</i></td>
   </ng-container>
 
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef> Delete </th>
+    <td mat-cell *matCellDef="let element">
+      <i class="material-icons" title="Delete" style="cursor: pointer;" (click)="this.showConfirmDelete[element.id]=true">delete_forever</i>
+      <p *ngIf="showConfirmDelete[element.id]">Are you sure? <a href="javascript:void(0);" (click)="deleteAudio(element);">Yes</a> / <a href="javascript:void(0);" (click)="this.showConfirmDelete[element.id]=false">No</a></p>
+    </td>
+  </ng-container>
+
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></tr>
 </table>
@@ -98,7 +106,7 @@
       <input *ngIf="!audioItem.file" type="file" accept=".mp3" name="fileUpload" (change)="this.uploadFile($event)" />
 
       <!-- Show audio file (edit route only)-->
-      <p *ngIf="audioItem.file&&routeType == 'edit'">File: {{audioItem.file.fileName}} <i class="material-icons" style="cursor: pointer;" (click)="removeAudio();">delete_forever</i></p>
+      <p *ngIf="audioItem.file&&routeType == 'edit'">File: {{audioItem.file.fileName}} <i class="material-icons" style="cursor: pointer;" (click)="removeFileFromAudio();">delete_forever</i></p>
 
       <input type="hidden" name="file" [(ngModel)]="audioItem.file"/>
     </div>

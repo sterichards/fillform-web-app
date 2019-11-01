@@ -22,8 +22,7 @@ export class AudioService {
     return this.httpClient.get<Audio[]>(`${environment.apiUrl}/audio/` + id);
   }
 
-  create(form)
-  {
+  create(form) {
     const body = {
       file: form.value.file.id,
       name: form.value.name,
@@ -34,8 +33,7 @@ export class AudioService {
     return this.httpClient.post(`${environment.apiUrl}/audio`, body);
   }
 
-  update(form, entityId)
-  {
+  update(form, entityId) {
     const body = {
       file: form.value.file.id,
       name: form.value.name,
@@ -44,5 +42,9 @@ export class AudioService {
       enabled: form.value.enabled
     }
     return this.httpClient.put(`${environment.apiUrl}/audio/` + entityId, body);
+  }
+
+  delete(id) {
+    return this.httpClient.delete(`${environment.apiUrl}/audio` + id);
   }
 }

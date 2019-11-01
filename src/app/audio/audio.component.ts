@@ -25,8 +25,9 @@ export class AudioComponent implements OnInit {
   @ViewChild(MatSort, null) sort: MatSort;
   @ViewChild('table', null) table: MatTable<Audio>;
   private signId;
+  showConfirmDelete = [];
 
-  displayedColumns = ['id', 'name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'listen', 'edit'];
+  displayedColumns = ['id', 'name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'listen', 'edit', 'delete'];
 
   constructor(
     private audio: AudioService,
@@ -55,7 +56,8 @@ export class AudioComponent implements OnInit {
     }
 
     if (this.routeType === 'edit') {
-      this.audio.getSingle(1).subscribe((audio) => {
+
+      this.audio.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((audio) => {
         this.audioItem = audio;
       });
     }
@@ -93,11 +95,26 @@ export class AudioComponent implements OnInit {
     });
   }
 
-  removeAudio() {
+  removeFileFromAudio() {
     this.snackBar.open('Audio ' + this.audioItem.file.fileName + ' removed', '', {
       duration: 2000,
     });
     this.audioItem.file = null;
+  }
+
+  deleteAudio(element) {
+    this.audioItem.delete(element.id).subscribe(response => {
+
+      // Remove row from table
+      const index = this.dataSource.data.indexOf(element);
+      this.dataSource.data.splice(index, 1);
+      this.dataSource._updateChangeSubscription();
+
+      // Notification popup
+      this.snackBar.open('Audio ' + element.name + ' removed', '', {
+        duration: 2000,
+      });
+    });
   }
 
   uploadFile(fileInput: any) {

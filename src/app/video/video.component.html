@@ -51,7 +51,15 @@
 
   <ng-container matColumnDef="edit">
     <th mat-header-cell *matHeaderCellDef> Edit </th>
-    <td mat-cell *matCellDef="let element"><i class="material-icons">edit</i></td>
+    <td mat-cell *matCellDef="let element"><i class="material-icons" style="cursor: pointer;" title="Edit" (click)="this.router.navigate(['/video/edit/'+element.id]);">edit</i></td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef> Delete </th>
+    <td mat-cell *matCellDef="let element">
+      <i class="material-icons" title="Delete" style="cursor: pointer;" (click)="this.showConfirmDelete[element.id]=true">delete_forever</i>
+      <p *ngIf="showConfirmDelete[element.id]">Are you sure? <a href="javascript:void(0);" (click)="deleteVideo(element);">Yes</a> / <a href="javascript:void(0);" (click)="this.showConfirmDelete[element.id]=false">No</a></p>
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -80,10 +88,10 @@
 
     <div>
       <!-- Show file uploader -->
-      <input *ngIf="!videoItem.file" type="file" accept=".pdf" name="fileUpload" (change)="this.uploadFile($event)" />
+      <input *ngIf="!videoItem.file" type="file" accept=".mp4" name="fileUpload" (change)="this.uploadFile($event)" />
 
       <!-- Show video file (edit route only)-->
-      <p *ngIf="videoItem.file&&routeType == 'edit'">File: {{videoItem.file.fileName}} <i class="material-icons" style="cursor: pointer;" (click)="removeVideo();">delete_forever</i></p>
+      <p *ngIf="videoItem.file&&routeType == 'edit'">File: {{videoItem.file.fileName}} <i class="material-icons" style="cursor: pointer;" (click)="removeFileFromVideo();">delete_forever</i></p>
 
       <input type="hidden" name="file" [(ngModel)]="videoItem.file"/>
     </div>
@@ -93,7 +101,7 @@
     <div>
       <button mat-flat-button color="primary" type="submit" *ngIf="routeType == 'edit'">Update</button>
       <button mat-flat-button color="primary" type="submit" *ngIf="routeType == 'new'">Create</button>
-      &nbsp;<button mat-flat-button color="primary" (click)="router.navigate(['/videos'])">Cancel</button>
+      &nbsp;<button mat-flat-button color="primary" (click)="router.navigate(['/video'])">Cancel</button>
     </div>
   </form>
 </div>
