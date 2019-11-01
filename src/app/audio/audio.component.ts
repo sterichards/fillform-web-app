@@ -27,7 +27,7 @@ export class AudioComponent implements OnInit {
   private signId;
   showConfirmDelete = [];
 
-  displayedColumns = ['id', 'name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'listen', 'edit', 'delete'];
+  displayedColumns = ['id', 'name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
 
   constructor(
     private audio: AudioService,

@@ -9,6 +9,7 @@ import {AudioComponent} from '@app/audio/audio.component';
 import {DocumentComponent} from '@app/document/document.component';
 import {VideoComponent} from '@app/video/video.component';
 import {UsersComponent} from '@app/users/users.component';
+import {DocumentCategoryComponent} from '@app/document-category/document-category.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,21 @@ const routes: Routes = [
   {
     path: 'document/edit/:id',
     component: DocumentComponent,
+    data: { type: 'edit' }
+  },
+  {
+    path: 'document-category',
+    component: DocumentCategoryComponent,
+    data: { type: 'list' }
+  },
+  {
+    path: 'document-category/new',
+    component: DocumentCategoryComponent,
+    data: { type: 'new' }
+  },
+  {
+    path: 'document-category/edit/:id',
+    component: DocumentCategoryComponent,
     data: { type: 'edit' }
   },
   {

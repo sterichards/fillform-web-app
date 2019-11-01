@@ -36,7 +36,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSortModule} from '@angular/material/sort';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatSnackBarModule} from "@angular/material/snack-bar";;
+import { DocumentCategoryComponent } from './document-category/document-category.component'
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     VideoComponent,
     DocumentComponent,
     UsersComponent
-  ],
+,
+    DocumentCategoryComponent  ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

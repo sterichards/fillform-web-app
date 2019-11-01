@@ -28,7 +28,7 @@ export class VideoComponent implements OnInit {
   private signId;
   showConfirmDelete = [];
 
-  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'watch', 'edit', 'delete'];
+  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
 
   formGroup = this.formBuilder.group({
     file: [null, Validators.required]

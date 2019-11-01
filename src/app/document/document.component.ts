@@ -28,7 +28,7 @@ export class DocumentComponent implements OnInit {
   private signId;
   showConfirmDelete = [];
 
-  displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'location', 'edit', 'delete'];
+  displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
 
   constructor(
     private document: DocumentService,
