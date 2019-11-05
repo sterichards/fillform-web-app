@@ -21,24 +21,26 @@ export class DocumentService {
     return this.httpClient.get<Document[]>(`${environment.apiUrl}/documents/` + id);
   }
 
-  create(form) {
+  create(form, categoryId) {
     const body = {
       file: form.value.file.id,
       name: form.value.name,
       order: form.value.order,
       goLiveDate: form.value.goLiveDate,
-      enabled: form.value.enabled
+      enabled: form.value.enabled,
+      category: categoryId
     }
     return this.httpClient.post(`${environment.apiUrl}/documents`, body);
   }
 
-  update(form, entityId) {
+  update(form, entityId, categoryId) {
     const body = {
       file: form.value.file.id,
       name: form.value.name,
       order: form.value.order,
       goLiveDate: form.value.goLiveDate,
-      enabled: form.value.enabled
+      enabled: form.value.enabled,
+      category: categoryId
     }
     return this.httpClient.put(`${environment.apiUrl}/documents/` + entityId, body);
   }

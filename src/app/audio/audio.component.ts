@@ -103,7 +103,7 @@ export class AudioComponent implements OnInit {
   }
 
   deleteAudio(element) {
-    this.audioItem.delete(element.id).subscribe(response => {
+    this.audio.delete(element.id).subscribe(response => {
 
       // Remove row from table
       const index = this.dataSource.data.indexOf(element);

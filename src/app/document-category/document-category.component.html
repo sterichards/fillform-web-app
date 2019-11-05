@@ -49,13 +49,6 @@
       <input  matInput  placeholder="Name" name="name" [(ngModel)]="documentCategoryItem.name" required>
     </mat-form-field><br/>
 
-    <mat-form-field>
-      <mat-label>Go Live Date</mat-label>
-      <input  matInput [matDatepicker]="myPicker"  placeholder="date" name="goLiveDate" [(ngModel)]="documentCategoryItem.goLiveDate" required>
-      <mat-datepicker-toggle  matSuffix [for]="myPicker"></mat-datepicker-toggle>
-      <mat-datepicker #myPicker></mat-datepicker>
-    </mat-form-field><br/>
-
     <input type="hidden" name="order" [(ngModel)]="documentCategoryItem.order"/><br/>
 
     <div>

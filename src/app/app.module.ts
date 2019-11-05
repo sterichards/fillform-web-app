@@ -38,6 +38,7 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSnackBarModule} from "@angular/material/snack-bar";;
 import { DocumentCategoryComponent } from './document-category/document-category.component'
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 @NgModule({
   imports: [
@@ -69,7 +70,8 @@ import { DocumentCategoryComponent } from './document-category/document-category
     MatSliderModule,
     MatSlideToggleModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatAutocompleteModule
   ],
   declarations: [
     AppComponent,

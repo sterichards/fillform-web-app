@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
+import {FormGroup, FormBuilder, Validators, NgForm, FormControl} from '@angular/forms';
 import {DocumentService} from '../_services/document.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
@@ -10,6 +10,9 @@ import {MatSort} from '@angular/material/sort';
 import {Document} from '@app/_models/document';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
+import {DocumentCategoryService} from '@app/_services/document-category.service';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-document',
@@ -18,27 +21,32 @@ import {MatDialog} from '@angular/material/dialog';
 })
 export class DocumentComponent implements OnInit {
 
-  angForm: FormGroup;
   uploadForm: FormGroup;
   routeType;
   dataSource;
   documentItem;
+  documentCategoryItems;
   @ViewChild(MatSort, null) sort: MatSort;
   @ViewChild('table', null) table: MatTable<Document>;
   private signId;
   showConfirmDelete = [];
+  stateCtrl: FormControl;
+  filteredStates: Observable<any[]>;
 
-  displayedColumns = ['name', 'file.name', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
+  displayedColumns = ['name', 'file.name', 'category.name', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
 
   constructor(
-    private document: DocumentService,
+    private documentService: DocumentService,
+    private documentCategoryService: DocumentCategoryService,
     private router: Router,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.stateCtrl = new FormControl();
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => this.routeType = data.type);
@@ -48,17 +56,28 @@ export class DocumentComponent implements OnInit {
     }
 
     if (this.routeType === 'list') {
-      this.document.getAll().subscribe((documents) => {
+      this.documentService.getAll().subscribe((documents) => {
         this.dataSource = new MatTableDataSource(documents);
         this.dataSource.sort = this.sort;
       });
     }
 
     if (this.routeType === 'edit') {
-      this.document.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((document) => {
+      this.documentService.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((document) => {
         this.documentItem = document;
       });
     }
+
+    // Get document categories
+    this.documentCategoryService.getAll().subscribe((documentCategories) => {
+      this.documentCategoryItems = documentCategories;
+
+      this.filteredStates = this.stateCtrl.valueChanges
+        .pipe(
+          startWith(''),
+          map(state => state ? this.filterStates(state) : this.documentCategoryItems.slice())
+        );
+    });
 
     this.uploadForm = this.formBuilder.group({
       profile: ['']
@@ -67,29 +86,29 @@ export class DocumentComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     if (this.routeType === 'new') {
-      this.createDocument(form);
+      this.createDocument(form, this.documentItem.category.id);
     }
 
     if (this.routeType === 'edit') {
-      this.updateDocument(form);
+      this.updateDocument(form, this.documentItem.category.id);
     }
   }
 
-  updateDocument(form) {
-    this.document.update(form, this.documentItem.id).subscribe(response => {
+  updateDocument(form, categoryId) {
+    this.documentService.update(form, this.documentItem.id, categoryId).subscribe(response => {
       this.snackBar.open(this.documentItem.name + ' has been saved', '', {
         duration: 2000,
       });
-      this.router.navigate(['/documents']);
+      this.router.navigate(['/document']);
     });
   }
 
-  createDocument(form) {
-    this.document.create(form).subscribe(response => {
+  createDocument(form, categoryId) {
+    this.documentService.create(form, categoryId).subscribe(response => {
       this.snackBar.open(this.documentItem.name + ' has been created', '', {
         duration: 2000,
       });
-      this.router.navigate(['/documents']);
+      this.router.navigate(['/document']);
     });
   }
 
@@ -101,7 +120,7 @@ export class DocumentComponent implements OnInit {
   }
 
   deleteDocument(element) {
-    this.document.delete(element.id).subscribe(response => {
+    this.documentService.delete(element.id).subscribe(response => {
 
       // Remove row from table
       const index = this.dataSource.data.indexOf(element);
@@ -148,6 +167,21 @@ export class DocumentComponent implements OnInit {
 
       this.documentItem.file = signResponse;
     });
+  }
+
+  removeCategoryFromDocument() {
+    this.documentItem.category = null;
+  }
+
+  filterStates(name: string) {
+    return this.documentCategoryItems.filter(state =>
+      state.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  }
+
+  onEnter(evt: any, value) {
+    if (evt.source.selected) {
+      this.documentItem.category = value;
+    }
   }
 
 }

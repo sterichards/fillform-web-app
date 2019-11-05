@@ -30,10 +30,6 @@ export class VideoComponent implements OnInit {
 
   displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
 
-  formGroup = this.formBuilder.group({
-    file: [null, Validators.required]
-  });
-
   constructor(
     private video: VideoService,
     private router: Router,
