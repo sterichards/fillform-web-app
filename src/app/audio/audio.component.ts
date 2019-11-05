@@ -25,9 +25,10 @@ export class AudioComponent implements OnInit {
   @ViewChild(MatSort, null) sort: MatSort;
   @ViewChild('table', null) table: MatTable<Audio>;
   private signId;
+  tableOrder;
   showConfirmDelete = [];
 
-  displayedColumns = ['id', 'name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
+  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
 
   constructor(
     private audio: AudioService,
@@ -55,8 +56,13 @@ export class AudioComponent implements OnInit {
       });
     }
 
-    if (this.routeType === 'edit') {
+    if (this.routeType === 'editorder') {
+      this.displayedColumns = ['id', 'name'];
+      this.dataSource = this.audio.getAllArray().subscribe(
+        response => this.dataSource = response);
+    }
 
+    if (this.routeType === 'edit') {
       this.audio.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((audio) => {
         this.audioItem = audio;
       });
@@ -152,7 +158,25 @@ export class AudioComponent implements OnInit {
     });
   }
 
+  saveAudioOrder() {
+    let i = 1;
+    let newOrder = [];
+    this.tableOrder.container.data.forEach(audioRow => {
+      const objKey = Object.keys(audioRow);
+      newOrder.push({
+        id: audioRow.id,
+        order: i
+      });
+      i++;
+    });
+
+    this.audio.updateOrder(newOrder).subscribe(response => {
+      this.router.navigate(['/audio']);
+    });
+  }
+
   dropTable(event: CdkDragDrop<Audio[]>) {
+    this.tableOrder = event;
     const prevIndex = this.dataSource.findIndex((d) => d === event.item.data);
     moveItemInArray(this.dataSource, prevIndex, event.currentIndex);
     this.table.renderRows();

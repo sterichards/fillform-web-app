@@ -44,6 +44,11 @@ const routes: Routes = [
     data: { type: 'edit' }
   },
   {
+    path: 'audio/edit-order',
+    component: AudioComponent,
+    data: { type: 'editorder' }
+  },
+  {
     path: 'document',
     component: DocumentComponent,
     data: { type: 'list' }

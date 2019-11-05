@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
 import {Audio} from '@app/_models/audio';
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,13 @@ export class AudioService {
   }
 
   getAll(): Observable<Audio[]> {
-
     const params = new HttpParams().set('cms', 'true');
     return this.httpClient.get<Audio[]>(`${environment.apiUrl}/audio`, {params});
+  }
+
+  getAllArray() {
+    const params = new HttpParams().set('cms', 'true');
+    return this.httpClient.get(`${environment.apiUrl}/audio`, {params});
   }
 
   getSingle(id) {
@@ -42,6 +47,10 @@ export class AudioService {
       enabled: form.value.enabled
     }
     return this.httpClient.put(`${environment.apiUrl}/audio/` + entityId, body);
+  }
+
+  updateOrder(body) {
+    return this.httpClient.post(`${environment.apiUrl}/audio/setOrder`, body);
   }
 
   delete(id) {
