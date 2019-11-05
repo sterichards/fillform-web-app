@@ -13,6 +13,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {DocumentCategoryService} from '@app/_services/document-category.service';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {Audio} from "@app/_models/audio";
 
 @Component({
   selector: 'app-document',
@@ -29,6 +31,7 @@ export class DocumentComponent implements OnInit {
   @ViewChild(MatSort, null) sort: MatSort;
   @ViewChild('table', null) table: MatTable<Document>;
   private signId;
+  tableOrder;
   showConfirmDelete = [];
   stateCtrl: FormControl;
   filteredStates: Observable<any[]>;
@@ -60,6 +63,12 @@ export class DocumentComponent implements OnInit {
         this.dataSource = new MatTableDataSource(documents);
         this.dataSource.sort = this.sort;
       });
+    }
+
+    if (this.routeType === 'editorder') {
+      this.displayedColumns = ['id', 'name'];
+      this.dataSource = this.documentService.getAllArray().subscribe(
+        response => this.dataSource = response);
     }
 
     if (this.routeType === 'edit') {
@@ -182,6 +191,30 @@ export class DocumentComponent implements OnInit {
     if (evt.source.selected) {
       this.documentItem.category = value;
     }
+  }
+
+  saveDocumentOrder() {
+    let i = 1;
+    let newOrder = [];
+    this.tableOrder.container.data.forEach(documentRow => {
+      const objKey = Object.keys(documentRow);
+      newOrder.push({
+        id: documentRow.id,
+        order: i
+      });
+      i++;
+    });
+
+    this.documentService.updateOrder(newOrder).subscribe(response => {
+      this.router.navigate(['/document']);
+    });
+  }
+
+  dropTable(event: CdkDragDrop<Audio[]>) {
+    this.tableOrder = event;
+    const prevIndex = this.dataSource.findIndex((d) => d === event.item.data);
+    moveItemInArray(this.dataSource, prevIndex, event.currentIndex);
+    this.table.renderRows();
   }
 
 }

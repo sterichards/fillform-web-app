@@ -17,6 +17,11 @@ export class DocumentService {
     return this.httpClient.get<Document[]>(`${environment.apiUrl}/documents`, {params});
   }
 
+  getAllArray() {
+    const params = new HttpParams().set('cms', 'true');
+    return this.httpClient.get(`${environment.apiUrl}/documents`, {params});
+  }
+
   getSingle(id) {
     return this.httpClient.get<Document[]>(`${environment.apiUrl}/documents/` + id);
   }
@@ -43,6 +48,10 @@ export class DocumentService {
       category: categoryId
     }
     return this.httpClient.put(`${environment.apiUrl}/documents/` + entityId, body);
+  }
+
+  updateOrder(body) {
+    return this.httpClient.post(`${environment.apiUrl}/documents/setOrder`, body);
   }
 
   delete(id) {

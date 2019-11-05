@@ -17,6 +17,11 @@ export class VideoService {
     return this.httpClient.get<Video[]>(`${environment.apiUrl}/videos`, {params});
   }
 
+  getAllArray() {
+    const params = new HttpParams().set('cms', 'true');
+    return this.httpClient.get(`${environment.apiUrl}/videos`, {params});
+  }
+
   getSingle(id) {
     return this.httpClient.get<Video[]>(`${environment.apiUrl}/videos/` + id);
   }
@@ -41,6 +46,10 @@ export class VideoService {
       enabled: form.value.enabled
     }
     return this.httpClient.put(`${environment.apiUrl}/videos/` + entityId, body);
+  }
+
+  updateOrder(body) {
+    return this.httpClient.post(`${environment.apiUrl}/video/setOrder`, body);
   }
 
   delete(id) {

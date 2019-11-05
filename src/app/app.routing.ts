@@ -64,6 +64,11 @@ const routes: Routes = [
     data: { type: 'edit' }
   },
   {
+    path: 'document/edit-order',
+    component: DocumentComponent,
+    data: { type: 'editorder' }
+  },
+  {
     path: 'document-category',
     component: DocumentCategoryComponent,
     data: { type: 'list' }
@@ -92,6 +97,11 @@ const routes: Routes = [
     path: 'video/edit/:id',
     component: VideoComponent,
     data: { type: 'edit' }
+  },
+  {
+    path: 'video/edit-order',
+    component: VideoComponent,
+    data: { type: 'editorder' }
   },
   {
     path: 'users',
