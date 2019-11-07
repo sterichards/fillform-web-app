@@ -38,7 +38,8 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSnackBarModule} from "@angular/material/snack-bar";;
 import { DocumentCategoryComponent } from './document-category/document-category.component'
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";;
+import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component'
 
 @NgModule({
   imports: [
@@ -83,7 +84,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
     DocumentComponent,
     UsersComponent
 ,
-    DocumentCategoryComponent  ],
+    DocumentCategoryComponent ,
+    ForgottenPasswordComponent ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

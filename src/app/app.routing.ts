@@ -10,6 +10,7 @@ import {DocumentComponent} from '@app/document/document.component';
 import {VideoComponent} from '@app/video/video.component';
 import {UsersComponent} from '@app/users/users.component';
 import {DocumentCategoryComponent} from '@app/document-category/document-category.component';
+import {ForgottenPasswordComponent} from "@app/forgotten-password/forgotten-password.component";
 
 const routes: Routes = [
   {
@@ -112,6 +113,16 @@ const routes: Routes = [
     path: 'users/new',
     component: UsersComponent,
     data: { type: 'new' }
+  },
+  {
+    path: 'user/edit/:id',
+    component: UsersComponent,
+    data: { type: 'edit' }
+  },
+  {
+    path: 'forgotten-password',
+    component: ForgottenPasswordComponent,
+    data: {}
   },
 
   // otherwise redirect to home

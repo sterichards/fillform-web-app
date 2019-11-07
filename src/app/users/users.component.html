@@ -32,6 +32,11 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+    <td mat-cell *matCellDef="let element">{{element.role.description}}</td>
+  </ng-container>
+
   <ng-container matColumnDef="createdAt">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
     <td mat-cell *matCellDef="let element"> {{element.createdAt | date:'d/M/yy'}} </td>
@@ -39,48 +44,71 @@
 
   <ng-container matColumnDef="edit">
     <th mat-header-cell *matHeaderCellDef> Edit </th>
-    <td mat-cell *matCellDef="let element"><i class="material-icons">edit</i></td>
+    <td mat-cell *matCellDef="let element"><i class="material-icons" style="cursor: pointer;" title="Edit" (click)="this.router.navigate(['/user/edit/'+element.username]);">edit</i></td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef> Delete</th>
+    <td mat-cell *matCellDef="let element">
+      <i class="material-icons" title="Delete" style="cursor: pointer;"
+         (click)="this.showConfirmDelete[element.id]=true">delete_forever</i>
+      <p *ngIf="showConfirmDelete[element.id]">Are you sure? <a href="javascript:void(0);"
+                                                                (click)="deleteUser(element);">Yes</a> / <a
+        href="javascript:void(0);" (click)="this.showConfirmDelete[element.id]=false">No</a></p>
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 
-<!-- New User -->
-<form [formGroup]="newUserForm" (ngSubmit)="onSubmit()" *ngIf="routeType == 'new'">
-  <h2>New User</h2>
-  <div class="example-container" *ngIf="routeType == 'new'">
+<!-- New/Edit User -->
+<form #createUserForm='ngForm' (ngSubmit)="onSubmit(createUserForm)" *ngIf="routeType == 'edit' || routeType == 'new'">
+  <h2>{{routeType | titlecase}} User</h2>
+
+  <div class="example-container">
     <mat-form-field>
-      <input matInput placeholder="Enter your email" formControlName="email" required>
+      <input matInput placeholder="Email" name="email" [(ngModel)]="userItem.email" [disabled]="routeType == 'edit'" required>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Forename" formControlName="forename" required>
+      <input matInput placeholder="Forename" name="forename" [(ngModel)]="userItem.forename" required>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Surname" formControlName="surname" required>
+      <input matInput placeholder="Surname" name="surname" [(ngModel)]="userItem.surname" required>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Company" formControlName="company" required>
+      <input matInput placeholder="Company" name="company" [(ngModel)]="userItem.company" required>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Enter your password" formControlName="password" [type]="hide ? 'password' : 'text'">
+      <mat-label>Role</mat-label>
+      <mat-select placeholder="Role" name="role" [(ngModel)]="userItem.role">
+        <mat-option>--</mat-option>
+        <mat-option *ngFor="let roleItem of this.roles" [value]="roleItem.id">
+          {{roleItem.description}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="routeType == 'new'">
+      <input matInput placeholder="Enter your password" name="password" [(ngModel)]="userItem.password" [type]="hide ? 'password' : 'text'">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="routeType == 'new'">
+      <input matInput placeholder="Verify your password" name="passwordVerify" [(ngModel)]="userItem.passwordVerify" [type]="hide ? 'password' : 'text'">
       <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
               [attr.aria-pressed]="hide">
         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
     </mat-form-field>
 
-    <mat-form-field>
-      <input matInput placeholder="Verify your password" formControlName="passwordVerify" [type]="hide ? 'password' : 'text'">
-      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-              [attr.aria-pressed]="hide">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-    </mat-form-field>
+    <mat-checkbox [checked]="userItem.enabled" name="enabled" [(ngModel)]="userItem.enabled">Enabled</mat-checkbox>
 
     <p>
       <button mat-flat-button color="primary" type="submit">Submit</button>&nbsp;

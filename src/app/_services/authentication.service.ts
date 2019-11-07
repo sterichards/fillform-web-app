@@ -35,9 +35,19 @@ export class AuthenticationService {
 
         // login successful if there's a jwt token in the response
         if (response && response.access_token) {
+
+          let roles = [];
+
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(response.user));
           localStorage.setItem('token', response.access_token);
+
+          response.user.roles.forEach(role => {
+            roles.push(role.role);
+          });
+
+          console.log(JSON.stringify(roles));
+          localStorage.setItem('roles', JSON.stringify(roles));
           this.currentUserSubject.next(response);
         }
 

@@ -28,7 +28,7 @@ export class AudioComponent implements OnInit {
   tableOrder;
   showConfirmDelete = [];
 
-  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
+  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit'];
 
   constructor(
     private audio: AudioService,
@@ -66,6 +66,11 @@ export class AudioComponent implements OnInit {
       this.audio.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((audio) => {
         this.audioItem = audio;
       });
+    }
+
+    // Add delete column to table
+    if (this.hasRole('ROLE_ADMIN') || this.hasRole('ROLE_MANAGER')) {
+      this.displayedColumns.push('delete');
     }
 
     this.uploadForm = this.formBuilder.group({
@@ -180,5 +185,18 @@ export class AudioComponent implements OnInit {
     const prevIndex = this.dataSource.findIndex((d) => d === event.item.data);
     moveItemInArray(this.dataSource, prevIndex, event.currentIndex);
     this.table.renderRows();
+  }
+
+  hasRole(role) {
+    const userRoles = JSON.parse(localStorage.getItem('roles'));
+    let hasRole = false;
+
+    userRoles.forEach(userRole => {
+      if (userRole === role) {
+        hasRole = true;
+      }
+    });
+
+    return hasRole;
   }
 }

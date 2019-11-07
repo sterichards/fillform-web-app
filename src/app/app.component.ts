@@ -28,4 +28,17 @@ export class AppComponent {
         this.authenticationService.logout();
         this.router.navigate(['/login']);
     }
+
+  hasRole(role) {
+    const userRoles = JSON.parse(localStorage.getItem('roles'));
+    let hasRole = false;
+
+    userRoles.forEach(userRole => {
+      if (userRole === role) {
+        hasRole = true;
+      }
+    });
+
+    return hasRole;
+  }
 }
