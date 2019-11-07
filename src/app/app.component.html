@@ -1,14 +1,14 @@
 ﻿<!-- nav -->
 <mat-toolbar color="primary" *ngIf="currentUser">
-  <h3>Happy Hints CMS</h3>
+  <h3 class="mat-h2">Happy Hints CMS</h3>
   <ul>
-    <li><a [routerLink]="'/'">Home</a></li>
-    <li><a [routerLink]="'/audio'">Audio</a></li>
-    <li><a [routerLink]="'/document'">Document</a></li>
-    <li><a [routerLink]="'/document-category'">Document Category</a></li>
-    <li><a [routerLink]="'/video'">Video</a></li>
-    <li><a [routerLink]="'/users'" *ngIf="hasRole('ROLE_ADMIN');">Users</a></li>
-    <li><a (click)="logout()">Logout</a></li>
+    <li><a [routerLink]="'/'" class="mat-typography">Home</a></li>
+    <li><a [routerLink]="'/audio'" class="mat-typography">Audio</a></li>
+    <li><a [routerLink]="'/document'" class="mat-typography">Document</a></li>
+    <li><a [routerLink]="'/document-category'" class="mat-typography">Document Category</a></li>
+    <li><a [routerLink]="'/video'" class="mat-typography">Video</a></li>
+    <li><a [routerLink]="'/users'" class="mat-typography" *ngIf="hasRole('ROLE_ADMIN');">Users</a></li>
+    <li><a (click)="logout()" class="mat-typography">Logout</a></li>
 
   </ul>
 </mat-toolbar>

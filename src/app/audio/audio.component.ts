@@ -193,14 +193,12 @@ export class AudioComponent implements OnInit {
   }
 
   hasRole(role) {
-    const userRoles = JSON.parse(localStorage.getItem('roles'));
+    const userRole = JSON.parse(localStorage.getItem('roles'));
     let hasRole = false;
 
-    userRoles.forEach(userRole => {
-      if (userRole === role) {
-        hasRole = true;
-      }
-    });
+    if (userRole === role) {
+      hasRole = true;
+    }
 
     return hasRole;
   }

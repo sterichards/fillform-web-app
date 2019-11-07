@@ -28,7 +28,7 @@ export class VideoComponent implements OnInit {
   private signId;
   showConfirmDelete = [];
 
-  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
+  displayedColumns = ['name', 'file.name', 'length', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit'];
 
   constructor(
     private video: VideoService,
@@ -60,6 +60,11 @@ export class VideoComponent implements OnInit {
       this.video.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((video) => {
         this.videoItem = video;
       });
+    }
+
+    // Add delete column to table
+    if (this.hasRole('ROLE_ADMIN') || this.hasRole('ROLE_MANAGER')) {
+      this.displayedColumns.push('delete');
     }
 
     this.uploadForm = this.formBuilder.group({
@@ -150,6 +155,17 @@ export class VideoComponent implements OnInit {
 
       this.videoItem.file = signResponse;
     });
+  }
+
+  hasRole(role) {
+    const userRole = JSON.parse(localStorage.getItem('roles'));
+    let hasRole = false;
+
+    if (userRole === role) {
+      hasRole = true;
+    }
+
+    return hasRole;
   }
 
   public doFilter = (value: string) => {

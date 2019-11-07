@@ -36,7 +36,7 @@ export class DocumentComponent implements OnInit {
   stateCtrl: FormControl;
   filteredStates: Observable<any[]>;
 
-  displayedColumns = ['name', 'file.name', 'category.name', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit', 'delete'];
+  displayedColumns = ['name', 'file.name', 'category.name', 'enabled', 'goLiveDate', 'createdAt', 'download', 'edit'];
 
   constructor(
     private documentService: DocumentService,
@@ -75,6 +75,11 @@ export class DocumentComponent implements OnInit {
       this.documentService.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((document) => {
         this.documentItem = document;
       });
+    }
+
+    // Add delete column to table
+    if (this.hasRole('ROLE_ADMIN') || this.hasRole('ROLE_MANAGER')) {
+      this.displayedColumns.push('delete');
     }
 
     // Get document categories
@@ -221,4 +226,14 @@ export class DocumentComponent implements OnInit {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
+  hasRole(role) {
+    const userRole = JSON.parse(localStorage.getItem('roles'));
+    let hasRole = false;
+
+    if (userRole === role) {
+      hasRole = true;
+    }
+
+    return hasRole;
+  }
 }
