@@ -36,9 +36,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSortModule} from '@angular/material/sort';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatSnackBarModule} from "@angular/material/snack-bar";;
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { DocumentCategoryComponent } from './document-category/document-category.component'
-import {MatAutocompleteModule} from "@angular/material/autocomplete";;
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component'
 
 @NgModule({
@@ -72,7 +72,9 @@ import { ForgottenPasswordComponent } from './forgotten-password/forgotten-passw
     MatSlideToggleModule,
     FormsModule,
     MatSnackBarModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   declarations: [
     AppComponent,
@@ -82,10 +84,14 @@ import { ForgottenPasswordComponent } from './forgotten-password/forgotten-passw
     AudioComponent,
     VideoComponent,
     DocumentComponent,
-    UsersComponent
-,
+    UsersComponent,
     DocumentCategoryComponent ,
-    ForgottenPasswordComponent ],
+    ForgottenPasswordComponent
+  ],
+  exports: [
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

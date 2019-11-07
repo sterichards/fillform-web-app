@@ -11,6 +11,7 @@ import {Audio} from '@app/_models/audio';
 import {CdkDragDrop, moveItemInArray, transferArrayItem, CdkDragHandle} from '@angular/cdk/drag-drop';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
+import {MatFormFieldModule, MatInputModule } from '@angular/material';
 
 @Component({
   selector: 'app-audio',
@@ -185,6 +186,10 @@ export class AudioComponent implements OnInit {
     const prevIndex = this.dataSource.findIndex((d) => d === event.item.data);
     moveItemInArray(this.dataSource, prevIndex, event.currentIndex);
     this.table.renderRows();
+  }
+
+  public doFilter = (value: string) => {
+    this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
   hasRole(role) {

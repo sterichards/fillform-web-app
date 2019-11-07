@@ -6,6 +6,13 @@
   </label>&nbsp;
 </div>
 
+<div fxLayout fxLayoutAlign="center center" *ngIf="routeType == 'list'">
+  <br/>
+  <mat-form-field fxFlex="40%">
+    <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+</div>
+
 <!-- List Users -->
 <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z23" *ngIf="routeType == 'list'">
 

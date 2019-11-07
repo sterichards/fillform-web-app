@@ -217,4 +217,8 @@ export class DocumentComponent implements OnInit {
     this.table.renderRows();
   }
 
+  public doFilter = (value: string) => {
+    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  }
+
 }

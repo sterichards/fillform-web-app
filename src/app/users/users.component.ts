@@ -123,6 +123,10 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  public doFilter = (value: string) => {
+    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  }
+
   goBack() {
     this.location.back();
   }

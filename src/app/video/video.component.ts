@@ -151,4 +151,8 @@ export class VideoComponent implements OnInit {
       this.videoItem.file = signResponse;
     });
   }
+
+  public doFilter = (value: string) => {
+    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  }
 }
