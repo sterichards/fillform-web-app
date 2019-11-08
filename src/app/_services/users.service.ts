@@ -24,7 +24,7 @@ export class UsersService {
   }
 
   getSingle(id) {
-    return this.httpClient.get<User[]>(`${environment.apiUrl}/users/` + id);
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/users/` + id);
   }
 
   create(form) {
@@ -60,6 +60,6 @@ export class UsersService {
   }
 
   getRoles() {
-    return this.httpClient.get(`${environment.apiUrl}/roles`);
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/roles`);
   }
 }

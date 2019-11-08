@@ -42,12 +42,12 @@ export class UsersComponent implements OnInit {
       this.userItem = {};
       this.usersService.getRoles().subscribe(roles => {
         this.roles = [];
-        /*roles.forEach(role => {
+        roles.forEach(role => {
           if (role.role !== 'ROLE_USER') {
             delete role.menuItems;
             this.roles.push(role);
           }
-        });*/
+        });
       });
     }
 
@@ -59,18 +59,18 @@ export class UsersComponent implements OnInit {
     }
 
     if (this.routeType === 'edit') {
-      this.usersService.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((user) => {
-        this.userItem = user;
-        //this.userItem.role = user.role.id;
+      this.usersService.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((user: any) => {
+        this.userItem = user as any;
+        this.userItem.role = user.role.id;
 
         this.usersService.getRoles().subscribe(roles => {
           this.roles = [];
-          /*roles.forEach(role => {
+          roles.forEach(role => {
             if (role.role !== 'ROLE_USER') {
               delete role.menuItems;
               this.roles.push(role);
             }
-          });*/
+          });
         });
       });
     }
