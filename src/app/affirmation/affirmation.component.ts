@@ -2,13 +2,13 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, NgForm} from '@angular/forms';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {Audio} from '@app/_models/audio';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AffirmationService} from '@app/_services/affirmation.service';
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {Affirmation} from '@app/_models/affirmation';
 
 @Component({
   selector: 'app-affirmation',
@@ -22,7 +22,7 @@ export class AffirmationComponent implements OnInit {
   dataSource;
   affirmationItem;
   @ViewChild(MatSort, null) sort: MatSort;
-  @ViewChild('table', null) table: MatTable<Audio>;
+  @ViewChild('table', null) table: MatTable<Affirmation>;
   private signId;
   tableOrder;
   showConfirmDelete = [];
@@ -60,8 +60,8 @@ export class AffirmationComponent implements OnInit {
     }
 
     if (this.routeType === 'edit') {
-      this.affirmation.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((audio) => {
-        this.affirmationItem = audio;
+      this.affirmation.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((affirmation) => {
+        this.affirmationItem = affirmation;
       });
     }
 
@@ -110,7 +110,7 @@ export class AffirmationComponent implements OnInit {
     this.affirmationItem.file = null;
   }
 
-  deleteAudio(element) {
+  deleteAffirmation(element) {
     this.affirmationItem.delete(element.id).subscribe(response => {
 
       // Remove row from table
@@ -125,7 +125,7 @@ export class AffirmationComponent implements OnInit {
     });
   }
 
-  dropTable(event: CdkDragDrop<Audio[]>) {
+  dropTable(event: CdkDragDrop<Affirmation[]>) {
     this.tableOrder = event;
     const prevIndex = this.dataSource.findIndex((d) => d === event.item.data);
     moveItemInArray(this.dataSource, prevIndex, event.currentIndex);

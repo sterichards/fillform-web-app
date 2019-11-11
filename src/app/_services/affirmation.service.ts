@@ -15,16 +15,16 @@ export class AffirmationService {
 
   getAll(): Observable<Affirmation[]> {
     const params = new HttpParams().set('cms', 'true');
-    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/audio`, {params});
+    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/affirmation`, {params});
   }
 
   getAllArray() {
     const params = new HttpParams().set('cms', 'true');
-    return this.httpClient.get(`${environment.apiUrl}/audio`, {params});
+    return this.httpClient.get(`${environment.apiUrl}/affirmation`, {params});
   }
 
   getSingle(id) {
-    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/audio/` + id);
+    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/affirmation/` + id);
   }
 
   create(form) {
@@ -35,7 +35,7 @@ export class AffirmationService {
       goLiveDate: form.value.goLiveDate,
       enabled: form.value.enabled
     }
-    return this.httpClient.post(`${environment.apiUrl}/audio`, body);
+    return this.httpClient.post(`${environment.apiUrl}/affirmation`, body);
   }
 
   update(form, entityId) {
@@ -46,14 +46,14 @@ export class AffirmationService {
       goLiveDate: form.value.goLiveDate,
       enabled: form.value.enabled
     }
-    return this.httpClient.put(`${environment.apiUrl}/audio/` + entityId, body);
+    return this.httpClient.put(`${environment.apiUrl}/affirmation/` + entityId, body);
   }
 
   updateOrder(body) {
-    return this.httpClient.post(`${environment.apiUrl}/audio/setOrder`, body);
+    return this.httpClient.post(`${environment.apiUrl}/affirmation/setOrder`, body);
   }
 
   delete(id) {
-    return this.httpClient.delete(`${environment.apiUrl}/audio/` + id);
+    return this.httpClient.delete(`${environment.apiUrl}/affirmation/` + id);
   }
 }
