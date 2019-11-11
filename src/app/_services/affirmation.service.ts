@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
 import {map} from "rxjs/operators";
+import {Affirmation} from "@app/_models/affirmation";
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,9 @@ export class AffirmationService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getAll(): Observable<Audio[]> {
+  getAll(): Observable<Affirmation[]> {
     const params = new HttpParams().set('cms', 'true');
-    return this.httpClient.get<Audio[]>(`${environment.apiUrl}/audio`, {params});
+    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/audio`, {params});
   }
 
   getAllArray() {
@@ -23,7 +24,7 @@ export class AffirmationService {
   }
 
   getSingle(id) {
-    return this.httpClient.get<Audio[]>(`${environment.apiUrl}/audio/` + id);
+    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/audio/` + id);
   }
 
   create(form) {

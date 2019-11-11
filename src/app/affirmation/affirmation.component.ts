@@ -13,7 +13,7 @@ import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 @Component({
   selector: 'app-affirmation',
   templateUrl: './affirmation.component.html',
-  styleUrls: ['./affirmation.component.less']
+  styleUrls: ['./affirmation.component.css']
 })
 export class AffirmationComponent implements OnInit {
 
@@ -124,7 +124,7 @@ export class AffirmationComponent implements OnInit {
       });
     });
   }
-  
+
   dropTable(event: CdkDragDrop<Audio[]>) {
     this.tableOrder = event;
     const prevIndex = this.dataSource.findIndex((d) => d === event.item.data);
