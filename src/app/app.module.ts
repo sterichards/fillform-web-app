@@ -40,7 +40,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { DocumentCategoryComponent } from './document-category/document-category.component'
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component'
-
+;
+import { AffirmationComponent } from './affirmation/affirmation.component'
 @NgModule({
   imports: [
     BrowserModule,
@@ -87,7 +88,8 @@ import { ForgottenPasswordComponent } from './forgotten-password/forgotten-passw
     UsersComponent,
     DocumentCategoryComponent ,
     ForgottenPasswordComponent
-  ],
+,
+    AffirmationComponent  ],
   exports: [
     MatFormFieldModule,
     MatInputModule,

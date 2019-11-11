@@ -11,6 +11,7 @@ import {VideoComponent} from '@app/video/video.component';
 import {UsersComponent} from '@app/users/users.component';
 import {DocumentCategoryComponent} from '@app/document-category/document-category.component';
 import {ForgottenPasswordComponent} from "@app/forgotten-password/forgotten-password.component";
+import {AffirmationComponent} from "@app/affirmation/affirmation.component";
 
 const routes: Routes = [
   {
@@ -28,7 +29,6 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent
   },
-
   {
     path: 'audio',
     component: AudioComponent,
@@ -42,6 +42,21 @@ const routes: Routes = [
   {
     path: 'audio/edit/:id',
     component: AudioComponent,
+    data: { type: 'edit' }
+  },
+  {
+    path: 'affirmation',
+    component: AffirmationComponent,
+    data: { type: 'list' }
+  },
+  {
+    path: 'affirmation/new',
+    component: AffirmationComponent,
+    data: { type: 'new' }
+  },
+  {
+    path: 'affirmation/edit/:id',
+    component: AffirmationComponent,
     data: { type: 'edit' }
   },
   {
