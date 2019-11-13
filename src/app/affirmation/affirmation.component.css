@@ -9,3 +9,52 @@ th, td {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin: 10px;
+}
+
+.mat-slider-horizontal {
+  width: 300px;
+}
+
+.mat-slider-vertical {
+  height: 300px;
+}
+
+.form-full-width {
+  min-width: 150px;
+  max-width: 500px;
+  width:100%;
+}
+
+.input-full-width {
+  width:800px;
+}
+
+.mat-form-field.mat-form-field {
+  width: auto;
+}
+
+.mat-form-field-infix {
+  width: 400px;
+}
+
+::ng-deep .mat-input-wrapper{
+  width:400px !important;
+}
+
+.mat-input-wrapper{
+  width:400px !important;
+}

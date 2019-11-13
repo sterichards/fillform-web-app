@@ -42,6 +42,19 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component'
 ;
 import { AffirmationComponent } from './affirmation/affirmation.component'
+import {ColorSketchModule} from "ngx-color/sketch";
+import {ColorCircleModule} from "ngx-color/circle";
+import {ColorMaterialModule} from "ngx-color/material";
+import {ColorSliderModule} from "ngx-color/slider";
+import {ColorTwitterModule} from "ngx-color/twitter";
+import {ColorShadeModule} from "ngx-color/shade";
+import {ColorChromeModule} from "ngx-color/chrome";
+import {ColorAlphaModule} from "ngx-color/alpha";
+import {ColorBlockModule} from "ngx-color/block";
+import {ColorGithubModule} from "ngx-color/github";
+import {ColorSwatchesModule} from "ngx-color/swatches";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -76,6 +89,18 @@ import { AffirmationComponent } from './affirmation/affirmation.component'
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
+    ColorSketchModule,
+    ColorCircleModule,
+    ColorMaterialModule,
+    ColorSliderModule,
+    ColorTwitterModule,
+    ColorShadeModule,
+    ColorChromeModule,
+    ColorAlphaModule,
+    ColorBlockModule,
+    ColorGithubModule,
+    ColorSwatchesModule,
+    MatButtonToggleModule
   ],
   declarations: [
     AppComponent,
@@ -96,7 +121,7 @@ import { AffirmationComponent } from './affirmation/affirmation.component'
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

@@ -1,11 +1,5 @@
 <h1 class="mat-h1">Affirmation</h1>
 
-<div *ngIf="routeType == 'list'">
-  <label>
-    <button mat-flat-button color="primary" (click)="router.navigate(['/affirmation/new']);">Add new affirmation</button>
-  </label>&nbsp;
-</div>
-
 <div fxLayout fxLayoutAlign="center center" *ngIf="routeType == 'list'">
   <br/>
   <mat-form-field fxFlex="40%">
@@ -19,32 +13,9 @@
        class="mat-elevation-z23"
        *ngIf="routeType == 'list'"
 >
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name</th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="file.name">
-    <th mat-header-cell *matHeaderCellDef> File Name</th>
-    <td mat-cell *matCellDef="let element"> {{element.file.fileName}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="length">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Length (HH:MM:SS)</th>
-    <td mat-cell *matCellDef="let element"> {{element.hMSLength}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="enabled">
-    <th mat-header-cell *matHeaderCellDef> Enabled</th>
-    <td mat-cell *matCellDef="let element">
-      <i class="material-icons" *ngIf="element.enabled==true">check_circle</i>
-      <i class="material-icons" *ngIf="element.enabled==false">highlight_off</i>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="goLiveDate">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Go Live Date (DD-MM-YY)</th>
-    <td mat-cell *matCellDef="let element"> {{element.goLiveDate | date:'d/M/yy'}} </td>
+  <ng-container matColumnDef="day">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Day</th>
+    <td mat-cell *matCellDef="let element"> {{element.day}} </td>
   </ng-container>
 
   <ng-container matColumnDef="createdAt">
@@ -52,9 +23,9 @@
     <td mat-cell *matCellDef="let element"> {{element.createdAt | date:'d/M/yy'}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="download">
-    <th mat-header-cell *matHeaderCellDef> Download</th>
-    <td mat-cell *matCellDef="let element"><a href="{{element.file.s3Url}}"><i class="material-icons">cloud_download</i></a>
+  <ng-container matColumnDef="preview">
+    <th mat-header-cell *matHeaderCellDef> Preview</th>
+    <td mat-cell *matCellDef="let element"><a href="javascript:void(0);"><i class="material-icons">slideshow</i></a>
     </td>
   </ng-container>
 
@@ -64,17 +35,80 @@
                                               (click)="this.router.navigate(['/affirmation/edit/'+element.id]);">edit</i></td>
   </ng-container>
 
-  <ng-container matColumnDef="delete">
-    <th mat-header-cell *matHeaderCellDef> Delete</th>
-    <td mat-cell *matCellDef="let element">
-      <i class="material-icons" title="Delete" style="cursor: pointer;"
-         (click)="this.showConfirmDelete[element.id]=true">delete_forever</i>
-      <p *ngIf="showConfirmDelete[element.id]">Are you sure? <a href="javascript:void(0);"
-                                                                (click)="deleteAffirmation(element);">Yes</a> / <a
-        href="javascript:void(0);" (click)="this.showConfirmDelete[element.id]=false">No</a></p>
-    </td>
-  </ng-container>
-
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<!-- Edit or New -->
+<div *ngIf="routeType == 'edit'" style="width:50%;">
+
+  <h2>{{routeType | titlecase}} Affirmation</h2>
+
+  <form #createAffirmationForm='ngForm' (ngSubmit)="onSubmit(createAffirmationForm)" class="form-full-width">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" name="name" [(ngModel)]="affirmationItem.name" required>
+    </mat-form-field><br/>
+
+    <mat-form-field>
+      <mat-label>Hint</mat-label>
+      <p [innerHTML]="theHtmlString" contenteditable="true" style="width:180px;border-bottom:1px solid;" [(ngModel)]="affirmationItem.hint"></p>
+      <button (click)="boldenText();"><i class="material-icons">format_bold</i></button >
+    </mat-form-field><br/>
+
+    <mat-form-field>
+      <mat-label>Explanation</mat-label>
+      <input matInput placeholder="Name" name="explanation" [(ngModel)]="affirmationItem.explanation" required>
+
+      <textarea matInput
+                placeholder="Comment"
+                [(ngModel)]="affirmationItem.explanation"
+                cdkAutosizeMinRows="5"
+                cdkAutosizeMaxRows="10"
+                >
+      </textarea>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field>
+      <mat-label>Text horizontal positioning</mat-label>
+      <mat-select placeholder="textXPos" name="textXPos" [(ngModel)]="affirmationItem.textXPos">
+        <mat-option>--</mat-option>
+        <mat-option *ngFor="let position of this.positions" [value]="position.id">
+          {{position.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field><br/>
+
+    <mat-label>Text horizontal positioning</mat-label><br/>
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+      <mat-button-toggle value="l" (click)="setTextAlignment('l');" [(ngModel)]="affirmationItem._null"><i class="material-icons">format_align_left</i></mat-button-toggle>
+      <mat-button-toggle value="c" (click)="setTextAlignment('c');" [(ngModel)]="affirmationItem._null"><i class="material-icons">format_align_center</i></mat-button-toggle>
+      <mat-button-toggle value="r" (click)="setTextAlignment('r');" [(ngModel)]="affirmationItem._null"><i class="material-icons">format_align_right</i></mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <color-swatches (onChange)="colorChanged($event);"></color-swatches>
+
+    <mat-card class="result">
+      <mat-card-content>
+        <h2 class="example-h2">Text vertical alignment</h2>
+
+        <mat-slider
+          class="example-margin"
+          [disabled]="disabled"
+          [invert]="invert"
+          [max]="max"
+          [min]="min"
+          [step]="step"
+          [thumbLabel]="thumbLabel"
+          [tickInterval]="tickInterval"
+          [(ngModel)]="affirmationItem.textYPos"
+          [vertical]="vertical">
+        </mat-slider>
+      </mat-card-content>
+    </mat-card>
+
+  </form>
+</div>
+<br/><br/><br/>
+
