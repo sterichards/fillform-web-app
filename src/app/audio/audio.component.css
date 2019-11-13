@@ -9,3 +9,7 @@ th, td {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.mat-table .mat-row:hover {
+  background: rgba(0, 0, 0, 0.04);
+}

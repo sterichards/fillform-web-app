@@ -14,8 +14,8 @@
        *ngIf="routeType == 'list'"
 >
   <ng-container matColumnDef="day">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Day</th>
-    <td mat-cell *matCellDef="let element"> {{element.day}} </td>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Day (DD-MM)</th>
+    <td mat-cell *matCellDef="let element"> {{formatDate(element.day)}} </td>
   </ng-container>
 
   <ng-container matColumnDef="createdAt">

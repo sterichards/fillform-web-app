@@ -47,14 +47,6 @@ th, td {
   width: auto;
 }
 
-.mat-form-field-infix {
-  width: 400px;
-}
-
-::ng-deep .mat-input-wrapper{
-  width:400px !important;
-}
-
-.mat-input-wrapper{
-  width:400px !important;
+.mat-table .mat-row:hover {
+  background: rgba(0, 0, 0, 0.04);
 }

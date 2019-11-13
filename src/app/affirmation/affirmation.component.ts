@@ -124,6 +124,13 @@ export class AffirmationComponent implements OnInit {
     this.affirmationItem.textAlignment = textPositionValue;
   }
 
+  formatDate(date) {
+    const day = date.substr(2);
+    const month = date.substr(0, 2);
+
+    return day + '-' + month;
+  }
+
   boldenText() {
     var text = "";
     if (window.getSelection) {
