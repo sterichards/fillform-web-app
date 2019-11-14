@@ -30,7 +30,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatToolbar, MatToolbarModule} from '@angular/material/toolbar';
+import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSortModule} from '@angular/material/sort';
@@ -39,21 +39,21 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { DocumentCategoryComponent } from './document-category/document-category.component'
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component'
-;
-import { AffirmationComponent } from './affirmation/affirmation.component'
-import {ColorSketchModule} from "ngx-color/sketch";
-import {ColorCircleModule} from "ngx-color/circle";
-import {ColorMaterialModule} from "ngx-color/material";
-import {ColorSliderModule} from "ngx-color/slider";
-import {ColorTwitterModule} from "ngx-color/twitter";
-import {ColorShadeModule} from "ngx-color/shade";
-import {ColorChromeModule} from "ngx-color/chrome";
-import {ColorAlphaModule} from "ngx-color/alpha";
-import {ColorBlockModule} from "ngx-color/block";
-import {ColorGithubModule} from "ngx-color/github";
-import {ColorSwatchesModule} from "ngx-color/swatches";
-import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component';
+import { AffirmationComponent } from './affirmation/affirmation.component';
+import {ColorSketchModule} from 'ngx-color/sketch';
+import {ColorCircleModule} from 'ngx-color/circle';
+import {ColorMaterialModule} from 'ngx-color/material';
+import {ColorSliderModule} from 'ngx-color/slider';
+import {ColorTwitterModule} from 'ngx-color/twitter';
+import {ColorShadeModule} from 'ngx-color/shade';
+import {ColorChromeModule} from 'ngx-color/chrome';
+import {ColorAlphaModule} from 'ngx-color/alpha';
+import {ColorBlockModule} from 'ngx-color/block';
+import {ColorGithubModule} from 'ngx-color/github';
+import {ColorSwatchesModule} from 'ngx-color/swatches';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -100,7 +100,8 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
     ColorBlockModule,
     ColorGithubModule,
     ColorSwatchesModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatDialogModule
   ],
   declarations: [
     AppComponent,
@@ -111,13 +112,14 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
     VideoComponent,
     DocumentComponent,
     UsersComponent,
-    DocumentCategoryComponent ,
-    ForgottenPasswordComponent
-,
-    AffirmationComponent  ],
+    DocumentCategoryComponent,
+    ForgottenPasswordComponent,
+    AffirmationComponent
+  ],
   exports: [
     MatFormFieldModule,
     MatInputModule,
+    MatDialogModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

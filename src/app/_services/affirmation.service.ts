@@ -16,22 +16,22 @@ export class AffirmationService {
     return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/affirmations`, {params});
   }
 
-  getAllArray() {
-    const params = new HttpParams().set('cms', 'true');
-    return this.httpClient.get(`${environment.apiUrl}/affirmations`, {params});
-  }
-
   getSingle(id) {
-    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/affirmations/` + id);
+    const params = new HttpParams().set('cms', 'true');
+    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/affirmations/` + id, {params});
   }
 
-  update(form, entityId) {
+  update(entityId, form, affirmationItem, htmlString) {
+
     const body = {
-      file: form.value.file.id,
-      name: form.value.name,
-      order: form.value.order,
-      goLiveDate: form.value.goLiveDate,
-      enabled: form.value.enabled
+      keyword: form.value.keyword,
+      hint: htmlString,
+      explanation: form.value.explanation,
+      largeImage: form.value.largeImage.id,
+      textXPos: affirmationItem.textXPos,
+      textYPos: affirmationItem.textYPos,
+      textAlignment: affirmationItem.textAlignment,
+      textColor: affirmationItem.textColor
     }
     return this.httpClient.put(`${environment.apiUrl}/affirmations/` + entityId, body);
   }
