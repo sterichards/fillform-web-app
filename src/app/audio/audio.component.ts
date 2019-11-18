@@ -132,6 +132,11 @@ export class AudioComponent implements OnInit {
   uploadFile(fileInput: any) {
     const fileData = <File> fileInput.target.files[0];
 
+    if (fileInput.target.files.length > 0) {
+      const file = fileInput.target.files[0];
+      this.uploadForm.get('profile').setValue(file);
+    }
+
     const body = {
       fileName: fileData.name,
       fileSize: fileData.size,

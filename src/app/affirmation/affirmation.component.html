@@ -45,70 +45,95 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 
-<!-- Edit or New -->
-<div *ngIf="routeType == 'edit'" style="width: 500px;">
+<!-- Edit -->
+<div *ngIf="routeType == 'edit'">
 
   <h2>Edit Affirmation</h2>
 
-  <div class="imagePreview">
-    <img src="{{affirmationItem.largeImage.s3Url}}" width="60%">
-    <div class="bottom-left">Bottom Left</div>
-    <div class="top-left">Top Left</div>
-    <div class="top-right">Top Right</div>
-    <div class="bottom-right">Bottom Right</div>
-    <div class="centered">Centered</div>
-  </div>
+  <form #createAffirmationForm='ngForm' (ngSubmit)="onSubmit(createAffirmationForm)">
 
-  <form #createAffirmationForm='ngForm' (ngSubmit)="onSubmit(createAffirmationForm)" style="width: 500px;">
+    <div class="content">
+      <div class="img-wrap">
+        <h4 [ngStyle]="cssClass" [innerHTML]="affirmationItem.hint"></h4>
+        <img src="{{affirmationItem.largeImage.s3Url}}"/>
+      </div>
+    </div>
 
-    <mat-form-field>
-      <mat-label>Day</mat-label>
-      <input placeholder="Day" name="day" [(ngModel)]="affirmationItem.day" readonly matInput required>
-    </mat-form-field>
-    <br/>
+    <table>
+      <tr>
+        <td>
+          <mat-form-field>
+            <mat-label>Day</mat-label>
+            <input placeholder="Day" name="day" [(ngModel)]="affirmationItem.day" readonly matInput required>
+          </mat-form-field>
+          <br/>
+        </td>
 
-    <mat-form-field>
-      <mat-label>Keyword</mat-label>
-      <input placeholder="Keyword" name="keyword" [(ngModel)]="affirmationItem.keyword" matInput required>
-    </mat-form-field>
-    <br/>
+        <td>
+          <mat-form-field>
+            <mat-label>Keyword</mat-label>
+            <input placeholder="Keyword" name="keyword" [(ngModel)]="affirmationItem.keyword" matInput required>
+          </mat-form-field>
+          <br/>
+        </td>
 
-    <mat-label>Hint:</mat-label>
-    <p [innerHTML]="theHtmlString" contenteditable="true" style="width:180px;border-bottom:1px solid;"
-       (mouseup)="checkIfTextIsHighlighted();" (blur)="boldenText();"></p>
-    <button (click)="boldenText();" *ngIf="showBoldButton==true"><i class="material-icons">format_bold</i></button>
-    <br/>
+        <td>
+          <mat-label>Hint:</mat-label>
+          <p [innerHTML]="affirmationItem.hint" contenteditable="true" style="width:180px;border-bottom:1px solid"
+             (mouseup)="checkIfTextIsHighlighted();" (blur)="boldenText();"></p>
+          <button (click)="boldenText();" *ngIf="showBoldButton==true"><i class="material-icons">format_bold</i>
+          </button>
+          <br/>
+        </td>
 
-    <mat-form-field style="width: 300px;height:300px;">
-      <mat-label>Explanation</mat-label>
+        <td>
+          <mat-form-field style="width: 300px;height:300px;">
+            <mat-label>Explanation</mat-label>
 
-      <textarea matInput
-                cdkTextareaAutosize
-                placeholder="Comment"
-                [(ngModel)]="affirmationItem.explanation"
-                name="explanation"
-      >
-      </textarea>
-    </mat-form-field>
-    <br/>
+            <textarea matInput
+                      cdkTextareaAutosize
+                      placeholder="Comment"
+                      [(ngModel)]="affirmationItem.explanation"
+                      name="explanation"
+            >
+          </textarea>
+          </mat-form-field>
+        </td>
 
-    <mat-form-field>
-      <mat-label>Horiztonal text position</mat-label>
-      <mat-select placeholder="textXPos" name="textXPos" [(ngModel)]="affirmationItem.textXPos">
-        <mat-option>--</mat-option>
-        <mat-option *ngFor="let position of this.positions" [value]="position.id">
-          {{position.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <br/>
+        <td>
+          <mat-form-field>
+            <mat-label>Horiztonal text position</mat-label>
+            <mat-select placeholder="textXPos" name="textXPos" [(ngModel)]="affirmationItem.textXPos"
+                        (selectionChange)="updateCss();">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let position of this.positions" [value]="position.id">
+                {{position.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
 
-    <mat-label>Text alignment</mat-label><br/>
-    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="affirmationItem.textAlignment">
-      <mat-button-toggle value="l" (click)="setTextAlignment('l');"><i class="material-icons">format_align_left</i></mat-button-toggle>
-      <mat-button-toggle value="c" (click)="setTextAlignment('c');"><i class="material-icons">format_align_center</i></mat-button-toggle>
-      <mat-button-toggle value="r" (click)="setTextAlignment('r');"><i class="material-icons">format_align_right</i></mat-button-toggle>
-    </mat-button-toggle-group><br/><br/>
+        <td>
+          <mat-label>Text alignment</mat-label>
+          <br/>
+          <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="affirmationItem.textAlignment">
+            <mat-button-toggle value="l" (click)="setTextAlignment('l');"><i class="material-icons">format_align_left</i>
+            </mat-button-toggle>
+            <mat-button-toggle value="c" (click)="setTextAlignment('c');"><i class="material-icons">format_align_center</i>
+            </mat-button-toggle>
+            <mat-button-toggle value="r" (click)="setTextAlignment('r');"><i class="material-icons">format_align_right</i>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </td>
+
+        <td>
+          <mat-label>Text Colour</mat-label>
+
+          <color-swatches (onChange)="colorChanged($event);"></color-swatches>
+        </td>
+      </tr>
+    </table>
+
 
 
     <mat-label>Text veritcal positioning</mat-label>
@@ -128,22 +153,25 @@
         [vertical]="vertical"
         (change)="updateSliderValue($event)">
       </mat-slider>
-    </mat-card-content> <br/><br/>
+    </mat-card-content>
+    <br/><br/>
 
-    <mat-label>Text Colour</mat-label>
 
-    <color-swatches (onChange)="colorChanged($event);"></color-swatches><br/>
+    <br/>
 
     <div>
       <!-- Show file uploader -->
-      <input *ngIf="!affirmationItem.largeImage" type="file" accept=".jpg" name="fileUpload" (change)="this.uploadImage($event)"/>
+      <input *ngIf="!affirmationItem.largeImage" type="file" accept=".jpg" name="fileUpload" (change)="this.uploadFile($event)"/>
 
       <!-- Show audio file (edit route only)-->
-      <p *ngIf="affirmationItem.largeImage">File: {{affirmationItem.largeImage.fileName}}
+      <p *ngIf="affirmationItem.largeImage&&routeType == 'edit'">File: {{affirmationItem.largeImage.fileName}} <i class="material-icons"
+                                                                                          style="cursor: pointer;"
+                                                                                          (click)="removeImageFromAffirmation();">delete_forever</i>
       </p>
 
-      <input type="hidden" name="largeImage" [(ngModel)]="affirmationItem.largeImage"/>
-    </div><br/>
+      <input type="hidden" name="file" [(ngModel)]="affirmationItem.largeImage"/>
+    </div>
+    <br/>
 
     <div>
       <button mat-flat-button color="primary" type="submit" *ngIf="routeType == 'edit'">Update</button>

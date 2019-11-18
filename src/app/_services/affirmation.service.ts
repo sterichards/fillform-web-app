@@ -13,21 +13,21 @@ export class AffirmationService {
 
   getAll(): Observable<Affirmation[]> {
     const params = new HttpParams().set('cms', 'true');
-    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/affirmations`, {params});
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/affirmations`, {params});
   }
 
   getSingle(id) {
     const params = new HttpParams().set('cms', 'true');
-    return this.httpClient.get<Affirmation[]>(`${environment.apiUrl}/affirmations/` + id, {params});
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/affirmations/` + id, {params});
   }
 
-  update(entityId, form, affirmationItem, htmlString) {
+  update(entityId, form, affirmationItem) {
 
     const body = {
       keyword: form.value.keyword,
-      hint: htmlString,
+      hint: affirmationItem.hint,
       explanation: form.value.explanation,
-      largeImage: form.value.largeImage.id,
+      largeImage: form.value.file.id,
       textXPos: affirmationItem.textXPos,
       textYPos: affirmationItem.textYPos,
       textAlignment: affirmationItem.textAlignment,

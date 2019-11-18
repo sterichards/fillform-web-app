@@ -51,13 +51,23 @@ export class AffirmationComponent implements OnInit {
   showTicks = false;
   step = 1;
   thumbLabel = false;
-  vertical = false;
+  vertical = true;
   textYPos;
-  theHtmlString = 'Hello <b>this</b> is bold';
+  theHtmlString;
   showBoldButton = false;
   selectedText;
   test123 = 25;
   value = 40;
+  cssClass = {
+    position: 'absolute',
+    color: 'white',
+    'border-top': '0px',
+    'text-align': 'right',
+    top: '0%',
+    'font-size': '40px'
+  }
+
+  someVar = 'My text';
 
   displayedColumns = ['day', 'keyword', 'createdAt', 'preview', 'edit'];
 
@@ -85,7 +95,7 @@ export class AffirmationComponent implements OnInit {
     if (this.routeType === 'edit') {
       this.affirmation.getSingle(this.route.snapshot.paramMap.get('id')).subscribe((affirmation) => {
         this.affirmationItem = affirmation;
-        this.affirmationItem.textYPos = +affirmation.textYPos;
+        this.updateCss();
       });
     }
 
@@ -103,19 +113,12 @@ export class AffirmationComponent implements OnInit {
 
   updateAffirmation(form) {
 
-    this.affirmation.update(this.affirmationItem.id, form, this.affirmationItem, this.theHtmlString).subscribe(response => {
+    this.affirmation.update(this.affirmationItem.id, form, this.affirmationItem).subscribe(response => {
       this.snackBar.open(this.affirmationItem.name + ' has been saved', '', {
         duration: 2000,
       });
       this.router.navigate(['/affirmation']);
     });
-  }
-
-  removeFileFromAffirmation() {
-    this.snackBar.open('Affirmation ' + this.affirmationItem.file.fileName + ' removed', '', {
-      duration: 2000,
-    });
-    this.affirmationItem.file = null;
   }
 
   public doFilter = (value: string) => {
@@ -124,6 +127,7 @@ export class AffirmationComponent implements OnInit {
 
   colorChanged($event: ColorEvent) {
     this.affirmationItem.textColor = $event.color.hex;
+    this.cssClass.color = $event.color.hex;
   }
 
   setTextAlignment(textPositionValue) {
@@ -144,10 +148,10 @@ export class AffirmationComponent implements OnInit {
     }
     this.selectedText = text;
 
-    this.theHtmlString = this.theHtmlString.replace(/<\/?[^>]+(>|$)/g, '');
+    this.affirmationItem.hint = this.affirmationItem.hint.replace(/<\/?[^>]+(>|$)/g, '');
 
-    const replaced = this.theHtmlString.replace(text, '<b>' + text + '</b>');
-    this.theHtmlString = replaced;
+    const replaced = this.affirmationItem.hint.replace(text, '<b>' + text + '</b>');
+    this.affirmationItem.hint = replaced;
 
     this.showBoldButton = false;
   }
@@ -168,10 +172,16 @@ export class AffirmationComponent implements OnInit {
 
   updateSliderValue(event) {
     this.affirmationItem.textYPos = event.value;
+    this.cssClass.top = event.value + '%';
   }
 
-  uploadImage(fileInput: any) {
+  uploadFile(fileInput: any) {
     const fileData = <File> fileInput.target.files[0];
+
+    if (fileInput.target.files.length > 0) {
+      const file = fileInput.target.files[0];
+      this.uploadForm.get('profile').setValue(file);
+    }
 
     const body = {
       fileName: fileData.name,
@@ -201,8 +211,31 @@ export class AffirmationComponent implements OnInit {
 
       this.httpClient.post(signResponse.s3UploadUrl, formData).subscribe(s3UploadResponse => {});
 
-      this.affirmationItem.file = signResponse;
+      this.affirmationItem.largeImage = signResponse;
     });
+  }
+
+  removeImageFromAffirmation() {
+    this.snackBar.open('Audio ' + this.affirmationItem.largeImage.fileName + ' removed', '', {
+      duration: 2000,
+    });
+    this.affirmationItem.largeImage = null;
+  }
+
+  updateCss() {
+
+    // Horizontal positioning
+    switch (this.affirmationItem.textXPos) {
+      case 'l':
+        this.cssClass['text-align'] = 'left';
+        break;
+      case 'c':
+        this.cssClass['text-align'] = 'center';
+        break;
+      case 'r':
+        this.cssClass['text-align'] = 'right';
+        break;
+    }
   }
 
   get tickInterval(): number | 'auto' {
