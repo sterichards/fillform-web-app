@@ -22,9 +22,6 @@ import {JwtInterceptor, ErrorInterceptor} from './_helpers';
 import {HomeComponent} from './home';
 import {AdminComponent} from './admin';
 import {LoginComponent} from './login';
-import {AudioComponent} from '@app/audio/audio.component';
-import {VideoComponent} from '@app/video/video.component';
-import {DocumentComponent} from '@app/document/document.component';
 import {UsersComponent} from '@app/users/users.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
@@ -37,10 +34,8 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { DocumentCategoryComponent } from './document-category/document-category.component'
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component';
-import { AffirmationComponent } from './affirmation/affirmation.component';
 import {ColorSketchModule} from 'ngx-color/sketch';
 import {ColorCircleModule} from 'ngx-color/circle';
 import {ColorMaterialModule} from 'ngx-color/material';
@@ -108,13 +103,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     HomeComponent,
     AdminComponent,
     LoginComponent,
-    AudioComponent,
-    VideoComponent,
-    DocumentComponent,
     UsersComponent,
-    DocumentCategoryComponent,
-    ForgottenPasswordComponent,
-    AffirmationComponent
+    ForgottenPasswordComponent
   ],
   exports: [
     MatFormFieldModule,
