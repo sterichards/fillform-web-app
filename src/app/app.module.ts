@@ -49,6 +49,12 @@ import {ColorGithubModule} from 'ngx-color/github';
 import {ColorSwatchesModule} from 'ngx-color/swatches';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ListFormsComponent } from './list-forms/list-forms.component';
+import { ViewFormComponent } from './view-form/view-form.component';
+import { EditFormComponent } from './edit-form/edit-form.component';
+import {FormioModule} from 'angular-formio';;
+import { NewFormComponent } from './new-form/new-form.component'
+import {PrismService} from '@app/Prism.service';
 
 @NgModule({
   imports: [
@@ -96,7 +102,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     ColorGithubModule,
     ColorSwatchesModule,
     MatButtonToggleModule,
-    MatDialogModule
+    MatDialogModule,
+    FormioModule
   ],
   declarations: [
     AppComponent,
@@ -104,7 +111,11 @@ import {MatDialogModule} from '@angular/material/dialog';
     AdminComponent,
     LoginComponent,
     UsersComponent,
-    ForgottenPasswordComponent
+    ForgottenPasswordComponent,
+    ListFormsComponent,
+    ViewFormComponent,
+    EditFormComponent,
+    NewFormComponent,
   ],
   exports: [
     MatFormFieldModule,
@@ -113,7 +124,8 @@ import {MatDialogModule} from '@angular/material/dialog';
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    PrismService
   ],
   bootstrap: [AppComponent]
 })

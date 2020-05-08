@@ -1,8 +1,9 @@
 ﻿<!-- nav -->
 <mat-toolbar color="primary" *ngIf="currentUser">
-  <h3 class="mat-h2">CMS</h3>
+  <h3 class="mat-h2">Fillform CMS</h3>
   <ul>
     <li><a [routerLink]="'/'" class="mat-typography">Home</a></li>
+    <li><a [routerLink]="'/forms'" class="mat-typography">Forms</a></li>
     <li><a [routerLink]="'/users'" class="mat-typography" *ngIf="hasRole('ROLE_ADMIN');">Users</a></li>
     <li><a (click)="logout()" class="mat-typography">Logout</a></li>
 

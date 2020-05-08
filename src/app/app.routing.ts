@@ -7,6 +7,8 @@ import {AuthGuard} from './_helpers';
 import {Role} from './_models';
 import {UsersComponent} from '@app/users/users.component';
 import {ForgottenPasswordComponent} from "@app/forgotten-password/forgotten-password.component";
+import {ListFormsComponent} from "@app/list-forms/list-forms.component";
+import {NewFormComponent} from '@app/new-form/new-form.component';
 
 const routes: Routes = [
   {
@@ -43,6 +45,21 @@ const routes: Routes = [
     path: 'forgotten-password',
     component: ForgottenPasswordComponent,
     data: {}
+  },
+
+  // Forms
+  {
+    path: 'forms',
+    component: ListFormsComponent,
+    data: { type: 'list' },
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'new-form',
+    component: NewFormComponent,
+    data: { type: 'new' },
+    canActivate: [AuthGuard]
   },
 
   // otherwise redirect to home
