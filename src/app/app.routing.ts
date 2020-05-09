@@ -9,6 +9,7 @@ import {UsersComponent} from '@app/users/users.component';
 import {ForgottenPasswordComponent} from "@app/forgotten-password/forgotten-password.component";
 import {ListFormsComponent} from "@app/list-forms/list-forms.component";
 import {NewFormComponent} from '@app/new-form/new-form.component';
+import {EditFormComponent} from '@app/edit-form/edit-form.component';
 
 const routes: Routes = [
   {
@@ -59,6 +60,13 @@ const routes: Routes = [
     path: 'new-form',
     component: NewFormComponent,
     data: { type: 'new' },
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'edit-form/:id',
+    component: EditFormComponent,
+    data: { type: 'edit' },
     canActivate: [AuthGuard]
   },
 
