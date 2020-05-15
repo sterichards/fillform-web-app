@@ -17,8 +17,9 @@ export class FormService {
     return this.httpClient.get(`${environment.apiUrl}/form`, {params});
   }
 
-  getById(id: number) {
-    return this.httpClient.get<Form>(`${environment.apiUrl}/form/${id}`);
+  getSingle(id) {
+    const params = new HttpParams().set('cms', 'true');
+    return this.httpClient.get<any>(`${environment.apiUrl}/form/` + id, {params});
   }
 
   create(formName, formComponents) {
@@ -31,11 +32,15 @@ export class FormService {
     return this.httpClient.post(`${environment.apiUrl}/form/`, body);
   }
 
-  update(id, form) {
+  update(id, formName, formComponents) {
     const body = {
-      name: form.value.name,
-      data: form.value.data
+      name: formName,
+      data: JSON.stringify(formComponents)
     };
     return this.httpClient.put(`${environment.apiUrl}/form/` + id, body);
+  }
+
+  delete(id) {
+    return this.httpClient.delete(`${environment.apiUrl}/form/` + id);
   }
 }

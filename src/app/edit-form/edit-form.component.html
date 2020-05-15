@@ -1,1 +1,13 @@
-<p>edit-form works!</p>
+<h1>Edit: {{form.name}}</h1>
+
+<form #createForm='ngForm' (ngSubmit)="onSubmit(createForm)">
+  <mat-form-field appearance="outline">
+    <input  matInput  placeholder="Name" name="name" [(ngModel)]="formData.name" required>
+  </mat-form-field><br/>
+  <div>
+    <button mdbBtn color="primary" mdbWavesEffect type="submit">Update</button>&nbsp;
+    <button mdbBtn color="primary" mdbWavesEffect (click)="router.navigate(['/forms'])">Cancel</button>
+  </div>
+</form><br/><br/>
+
+<form-builder [form]="form" [options]="formOptions" (change)="onChange($event)"></form-builder>

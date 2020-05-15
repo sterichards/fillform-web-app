@@ -1,17 +1,12 @@
 <form #createForm='ngForm' (ngSubmit)="onSubmit(createForm)">
   <mat-form-field appearance="outline">
-    <mat-label>Name</mat-label>
     <input  matInput  placeholder="Name" name="name" [(ngModel)]="formData.name" required>
   </mat-form-field><br/>
 
   <div>
-    <button mat-flat-button color="primary" type="submit">Create</button>
+    <button mdbBtn color="primary" mdbWavesEffect type="submit">Create</button>&nbsp;
+    <button mdbBtn color="primary" mdbWavesEffect (click)="router.navigate(['/forms'])">Cancel</button>
   </div>
-</form>
+</form><br/>
 
 <form-builder [form]="form" [options]="formOptions" (change)="onChange($event)"></form-builder>
-<hr/>
-
-<div class="well jsonviewer">
-  <pre id="json"><code class="language-json" #json></code></pre>
-</div>
