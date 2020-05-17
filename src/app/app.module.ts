@@ -54,8 +54,10 @@ import { ViewFormComponent } from './view-form/view-form.component';
 import { EditFormComponent } from './edit-form/edit-form.component';
 import {FormioModule} from 'angular-formio';;
 import { NewFormComponent } from './new-form/new-form.component'
-import {PrismService} from '@app/Prism.service';
-
+import {PrismService} from '@app/Prism.service';;
+import { PreviewFormComponent } from './preview-form/preview-form.component'
+;
+import { CompleteFormComponent } from './complete-form/complete-form.component'
 @NgModule({
   imports: [
     BrowserModule,
@@ -116,6 +118,8 @@ import {PrismService} from '@app/Prism.service';
     ViewFormComponent,
     EditFormComponent,
     NewFormComponent,
+    PreviewFormComponent,
+    CompleteFormComponent
   ],
   exports: [
     MatFormFieldModule,

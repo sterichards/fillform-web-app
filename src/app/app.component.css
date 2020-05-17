@@ -1,4 +1,5 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 .navBarItem {
   font-size: 30px;
 }
@@ -27,3 +28,206 @@ li a:hover {
   background-color: #111;
 }
 
+:root {
+  --shade1: #29B5D4;
+  --shade2: #1B94AF;
+  --shade3: #1B94AF;
+  --shade4: #005757;
+}
+
+h1 {
+  color: var(--shade2);
+  letter-spacing: -1px;
+  font-size: 30px;
+  margin: 0 0 20px 0;
+}
+
+.centred {
+  text-align: center;
+}
+
+body {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #F7F6FD;
+  font-family: 'Noto Sans', sans-serif !important;
+}
+
+.container {
+  padding: 3%;
+}
+
+.logo img {
+  max-height: 100%;
+  padding-top: 30px;
+}
+
+/* Login */
+
+.login img {
+  margin-bottom: 20px;
+}
+
+.login .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
+.login .mat-form-field-label {
+  color: #b0b0b0;
+}
+
+/* Header */
+
+.mat-toolbar,
+.mat-toolbar h1,
+.mat-toolbar h2,
+.mat-toolbar h3,
+.mat-toolbar h4,
+.mat-toolbar h5,
+.mat-toolbar h6 {
+  font-family: 'Noto Sans', sans-serif !important;
+}
+
+/* Columns */
+
+.flex {
+  display: flex;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+/* Cards */
+
+.mat-card {
+  padding: 30px !important;
+  box-shadow: 0px 0px 20px 0px #EEECFF !important;
+}
+
+.centred-card {
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+/* Tables */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: none !important;
+}
+
+th, td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table td p.ng-star-inserted {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  transform: translate(10px, -5px);
+}
+
+.mat-table .mat-header-row .mat-header-cell {
+  background: var(--shade2);
+  color: #fff;
+}
+
+.mat-table .mat-row .edit .material-icons{
+  color: var(--shade1);
+}
+
+.mat-table .mat-row .delete .material-icons{
+  color: var(--shade1);
+}
+
+.mat-table td.mat-cell {
+  border-bottom: 1px solid #EFECFF;
+}
+
+/* Modal */
+
+.cdk-overlay-pane {
+  width: 450px !important;
+}
+
+/* Forms */
+
+.mat-form-field {
+  width: 100%;
+}
+
+.outlined-field {
+  padding: 10px !important;
+  background: #fff !important;
+  border-radius: 4px !important;
+  border: 1px solid #efecff !important;
+  font-size: 14px !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: auto !important;
+}
+
+.mr-1 {
+  margin-right: 10px !important;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: var(--shade1);
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle,
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+.mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+  background: var(--shade1);
+}
+
+.mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element,
+.mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element,
+.mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background: var(--shade1);
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: var(--shade1);
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: var(--shade2);
+}
+
+/* Timepicker */
+
+body .timepicker__header,
+body .clock-face__number > span.active {
+  background-color: var(--shade2) !important;
+}
+
+body .timepicker-button {
+  color: var(--shade1) !important;
+}
+
+.clock-face__container {
+  --button-color: var(--shade1) !important;
+  --dial-background-color: var(--shade1) !important;
+  --dial-editable-active-color: var(--shade1) !important;
+  --clock-hand-color: var(--shade1) !important;
+}
+
+/* Buttons */
+
+button.mat-flat-button.mat-primary {
+  background: var(--shade1) !important;
+  color: #fff;
+}
+
+body .mat-stroked-button.mat-primary {
+  color: var(--shade1);
+}

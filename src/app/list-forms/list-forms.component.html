@@ -1,8 +1,8 @@
 <h1 class="mat-h1">Forms</h1>
 
-<label>
-  <button mat-flat-button color="primary" (click)="router.navigate(['/new-form']);">Create New Form</button>
-</label>&nbsp;
+<div>
+  <button (click)="router.navigate(['/new-form']);">Create New Form</button>
+</div>&nbsp;
 
 <div fxLayout fxLayoutAlign="center center">
   <br/>
@@ -40,6 +40,13 @@
       <p *ngIf="showConfirmDelete[element.id]">Are you sure? <a href="javascript:void(0);"
                                                                 (click)="deleteForm(element);">Yes</a> / <a
         href="javascript:void(0);" (click)="this.showConfirmDelete[element.id]=false">No</a></p>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="preview">
+    <th mat-header-cell *matHeaderCellDef> Preview</th>
+    <td mat-cell *matCellDef="let element"><span class="material-icons" style="cursor: pointer;" title="Edit"
+                                              (click)="this.router.navigate(['/preview-form/'+element.id]);">play_arrow</span>
     </td>
   </ng-container>
 

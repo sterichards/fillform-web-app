@@ -22,7 +22,6 @@ export class NewFormComponent implements OnInit {
     builder: {
       basic: false,
       advanced: false,
-      layout: false,
       premium: false,
       data: false,
       customBasic: {
@@ -33,7 +32,9 @@ export class NewFormComponent implements OnInit {
           textfield: true,
           textarea: true,
           email: true,
-          phoneNumber: true
+          phoneNumber: true,
+          radio: true,
+          number: true
         }
       },
 
@@ -127,6 +128,7 @@ export class NewFormComponent implements OnInit {
   }
 
   createForm(form) {
+    console.log(form);
     this.formService.create(form.value.name, this.form.components).subscribe(response => {
       this.snackBar.open('New Form' + ' has been created', '', {
         duration: 2000,
