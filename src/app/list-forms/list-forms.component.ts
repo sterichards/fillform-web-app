@@ -14,7 +14,7 @@ export class ListFormsComponent implements OnInit {
   dataSource;
   @ViewChild(MatSort, null) sort: MatSort;
   @ViewChild('table', null) table: MatTable<Form>;
-  displayedColumns = ['name', 'createdAt', 'edit', 'delete', 'preview'];
+  displayedColumns = ['name', 'createdAt', 'edit', 'delete', 'preview', 'complete', 'responses'];
   forms;
   showConfirmDelete = [];
 

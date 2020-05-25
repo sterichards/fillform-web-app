@@ -1,1 +1,3 @@
-<p>complete-form works!</p>
+Form: {{formName}}<br/>
+
+<mat-formio [form]="form" (submit)="onSubmit($event.data)"></mat-formio>

@@ -58,6 +58,9 @@ import {PrismService} from '@app/Prism.service';;
 import { PreviewFormComponent } from './preview-form/preview-form.component'
 ;
 import { CompleteFormComponent } from './complete-form/complete-form.component'
+import {MatFormioModule} from 'angular-material-formio';
+import {FlexLayoutModule} from '@angular/flex-layout';;
+import { ViewFormResponsesComponent } from './view-form-responses/view-form-responses.component'
 @NgModule({
   imports: [
     BrowserModule,
@@ -105,7 +108,9 @@ import { CompleteFormComponent } from './complete-form/complete-form.component'
     ColorSwatchesModule,
     MatButtonToggleModule,
     MatDialogModule,
-    FormioModule
+    FormioModule,
+    MatFormioModule,
+    FlexLayoutModule
   ],
   declarations: [
     AppComponent,
@@ -120,7 +125,8 @@ import { CompleteFormComponent } from './complete-form/complete-form.component'
     NewFormComponent,
     PreviewFormComponent,
     CompleteFormComponent
-  ],
+,
+    ViewFormResponsesComponent  ],
   exports: [
     MatFormFieldModule,
     MatInputModule,

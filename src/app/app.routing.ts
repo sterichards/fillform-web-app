@@ -11,6 +11,8 @@ import {ListFormsComponent} from "@app/list-forms/list-forms.component";
 import {NewFormComponent} from '@app/new-form/new-form.component';
 import {EditFormComponent} from '@app/edit-form/edit-form.component';
 import {PreviewFormComponent} from '@app/preview-form/preview-form.component';
+import {CompleteFormComponent} from '@app/complete-form/complete-form.component';
+import {ViewFormResponsesComponent} from '@app/view-form-responses/view-form-responses.component';
 
 const routes: Routes = [
   {
@@ -75,6 +77,20 @@ const routes: Routes = [
     path: 'preview-form/:id',
     component: PreviewFormComponent,
     data: { type: 'preview' },
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'complete-form/:id',
+    component: CompleteFormComponent,
+    data: { type: 'complete' },
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'view-form-responses/:id',
+    component: ViewFormResponsesComponent,
+    data: { type: 'view' },
     canActivate: [AuthGuard]
   },
 
