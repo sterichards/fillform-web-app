@@ -1,1 +1,42 @@
-<p>view-form-responses works!</p>
+<h1 class="mat-h1">Form Responses</h1>
+
+<div fxLayout fxLayoutAlign="center center">
+  <br/>
+  <mat-form-field fxFlex="40%">
+    <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+</div>
+
+<div>
+  <button (click)="this.downloadResponsesAsCsv(this.formId);">Download all responses</button>
+</div>&nbsp;
+
+<table mat-table matSort
+       #table
+       [dataSource]="dataSource"
+       class="mat-elevation-z23"
+>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+    <td mat-cell class="name" *matCellDef="let element"> {{element.id}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="createdAt">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At</th>
+    <td mat-cell class="name" *matCellDef="let element"> {{element.createdAt | date:'dd/MM/yy | HH:mm'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="viewResponses">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> View Responses</th>
+    <td mat-cell class="viewResponses" *matCellDef="let element">
+      <span
+        class="material-icons"
+        style="cursor: pointer;"
+        (click)="this.router.navigate(['/view-form-responses-list/'+element.id]);"
+      >preview</span>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

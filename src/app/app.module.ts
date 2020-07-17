@@ -61,6 +61,8 @@ import { CompleteFormComponent } from './complete-form/complete-form.component'
 import {MatFormioModule} from 'angular-material-formio';
 import {FlexLayoutModule} from '@angular/flex-layout';;
 import { ViewFormResponsesComponent } from './view-form-responses/view-form-responses.component'
+import {AppService} from '@app/app.service';;
+import { ViewFormResponsesListComponent } from './view-form-responses-list/view-form-responses-list.component'
 @NgModule({
   imports: [
     BrowserModule,
@@ -126,7 +128,8 @@ import { ViewFormResponsesComponent } from './view-form-responses/view-form-resp
     PreviewFormComponent,
     CompleteFormComponent
 ,
-    ViewFormResponsesComponent  ],
+    ViewFormResponsesComponent ,
+    ViewFormResponsesListComponent ],
   exports: [
     MatFormFieldModule,
     MatInputModule,
@@ -135,7 +138,8 @@ import { ViewFormResponsesComponent } from './view-form-responses/view-form-resp
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    PrismService
+    PrismService,
+    AppService
   ],
   bootstrap: [AppComponent]
 })

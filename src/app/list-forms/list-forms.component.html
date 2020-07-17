@@ -21,6 +21,11 @@
     <td mat-cell class="name" *matCellDef="let element"> {{element.name}} </td>
   </ng-container>
 
+  <ng-container matColumnDef="responseCount">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Responses</th>
+    <td mat-cell class="name" *matCellDef="let element"> {{element.responseCount}} </td>
+  </ng-container>
+
   <ng-container matColumnDef="createdAt">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At</th>
     <td mat-cell class="name" *matCellDef="let element"> {{element.createdAt | date:'dd/MM/yy | HH:mm'}} </td>

@@ -13,6 +13,7 @@ import {EditFormComponent} from '@app/edit-form/edit-form.component';
 import {PreviewFormComponent} from '@app/preview-form/preview-form.component';
 import {CompleteFormComponent} from '@app/complete-form/complete-form.component';
 import {ViewFormResponsesComponent} from '@app/view-form-responses/view-form-responses.component';
+import {ViewFormResponsesListComponent} from '@app/view-form-responses-list/view-form-responses-list.component';
 
 const routes: Routes = [
   {
@@ -90,6 +91,13 @@ const routes: Routes = [
   {
     path: 'view-form-responses/:id',
     component: ViewFormResponsesComponent,
+    data: { type: 'view' },
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'view-form-responses-list/:id',
+    component: ViewFormResponsesListComponent,
     data: { type: 'view' },
     canActivate: [AuthGuard]
   },

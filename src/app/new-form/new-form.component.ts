@@ -91,15 +91,6 @@ export class NewFormComponent implements OnInit {
           }
         }
       },
-    },
-
-    editForm: {
-      textfield: [
-        {
-          key: 'api',
-          ignore: true
-        }
-      ]
     }
   };
 
